@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.example.mezereon.bookexchange.Adapter.MyRecycleViewAdapter;
 import com.example.mezereon.bookexchange.Adapter.NormalRecycleViewAdapter;
 import com.example.mezereon.bookexchange.R;
+import com.github.ybq.android.spinkit.SpinKitView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -28,6 +29,33 @@ public class SelfFragment extends Fragment {
     RecyclerView setting;
     @Bind(R.id.imageView3)
     ImageView bg;
+
+    private boolean hasLazyLoad = false;
+    public void setHasLazyLoad(boolean hasLazyLoad) {
+        this.hasLazyLoad = hasLazyLoad;
+    }
+
+    /**
+     * 懒加载,防止ViewPager重复创建
+     */
+    protected void onLazyLoad() {
+
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (getUserVisibleHint() && !hasLazyLoad) {
+            onLazyLoad();
+            hasLazyLoad = true;
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        hasLazyLoad = false;
+    }
     public SelfFragment() {
         // Required empty public constructor
     }
@@ -43,6 +71,12 @@ public class SelfFragment extends Fragment {
         setting.setAdapter(new MyRecycleViewAdapter(v.getContext()));
         OverScrollDecoratorHelper.setUpOverScroll(setting,OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
         return v;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
     }
 
 }

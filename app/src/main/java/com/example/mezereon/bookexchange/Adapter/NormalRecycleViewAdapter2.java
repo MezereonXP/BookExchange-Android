@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mezereon.bookexchange.Module.Article;
-import com.example.mezereon.bookexchange.Module.Book;
+import com.example.mezereon.bookexchange.Module.Forum;
 import com.example.mezereon.bookexchange.R;
 import com.squareup.picasso.Picasso;
 
@@ -24,24 +24,24 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by Mezereon on 2017/2/8.
+ * Created by Mezereon on 2017/2/9.
  */
 
-public class NormalRecycleViewAdapter extends RecyclerView.Adapter<NormalRecycleViewAdapter.NormalTextViewHolder> {
+public class NormalRecycleViewAdapter2 extends RecyclerView.Adapter<NormalRecycleViewAdapter2.NormalTextViewHolder> {
     private final LayoutInflater mLayoutInflater;
     private final Context mContext;
 
-    public List<Article> getArticles() {
-        return articles;
+    public List<Forum> getArticles() {
+        return forums;
     }
 
-    public void setArticles(List<Article> articles) {
-        this.articles = articles;
+    public void setArticles(List<Forum> forums) {
+        this.forums = forums;
     }
 
-    private List<Article> articles;
+    private List<Forum> forums;
 
-    public NormalRecycleViewAdapter(Context context) {
+    public NormalRecycleViewAdapter2(Context context) {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
     }
@@ -55,11 +55,11 @@ public class NormalRecycleViewAdapter extends RecyclerView.Adapter<NormalRecycle
 
     @Override
     public void onBindViewHolder(NormalTextViewHolder holder, final int position) {
-        holder.name.setText(articles.get(position).getUsername());
-        Picasso.with(mContext).load(articles.get(position).getAuthorpic()).into(holder.pic);
-        holder.content.setText(Html.fromHtml(articles.get(position).getIntroduction()));
+        holder.name.setText(forums.get(position).getUsername());
+        Picasso.with(mContext).load(forums.get(position).getSrc()).into(holder.pic);
+        holder.content.setText(Html.fromHtml(forums.get(position).getIntroduction()));
         holder.good.setText(position+"11 点赞数");
-        holder.title.setText(articles.get(position).getTitle());
+        holder.title.setText(forums.get(position).getTitle());
         holder.numOfComment.setText(position+"22 评论");
         holder.concern.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,10 +71,10 @@ public class NormalRecycleViewAdapter extends RecyclerView.Adapter<NormalRecycle
 
     @Override
     public int getItemCount() {
-        if(articles==null){
+        if(forums==null){
             return 0;
         }else{
-            return articles.size();
+            return forums.size();
         }
     }
 

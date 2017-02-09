@@ -10,6 +10,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,9 +21,23 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mezereon.bookexchange.Component.DaggerAppComponent;
+import com.example.mezereon.bookexchange.Module.Book;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Retrofit;
+import retrofit2.http.GET;
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -50,8 +65,12 @@ public class LoginActivity extends AppCompatActivity {
     @Bind(R.id.button2)
     Button btn_logIn;
 
+
+
     private  ObjectAnimator animator=new ObjectAnimator();
     private AnimatorSet animSet=new AnimatorSet();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

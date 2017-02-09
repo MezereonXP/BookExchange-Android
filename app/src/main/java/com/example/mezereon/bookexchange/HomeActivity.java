@@ -25,14 +25,29 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mezereon.bookexchange.Component.DaggerAppComponent;
 import com.example.mezereon.bookexchange.Fragment.CommentFragment;
 import com.example.mezereon.bookexchange.Fragment.SelfFragment;
 import com.example.mezereon.bookexchange.Fragment.TalkFragment;
+import com.example.mezereon.bookexchange.Module.Book;
 
 import java.util.ArrayList;
+import java.util.List;
+
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.Retrofit;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
+import rx.Observable;
+import rx.Scheduler;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -47,11 +62,16 @@ public class HomeActivity extends AppCompatActivity {
     @Bind(R.id.imageView2)
     ImageButton add;
 
+
+
     private ArrayList<MyOnTouchListener> onTouchListeners = new ArrayList<MyOnTouchListener>(
             10);
     private FragmentPagerAdapter myAdapter;
     private ArrayList<Fragment> myFragments=new ArrayList<>();
     private SelfFragment selffragment;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +82,7 @@ public class HomeActivity extends AppCompatActivity {
         getWindow().setEnterTransition(fade);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+
         init();
         add.setVisibility(View.VISIBLE);
         searchView.setVisibility(View.VISIBLE);
@@ -139,6 +160,8 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+
+
     }
     private void init() {
         CommentFragment commentfragment=new CommentFragment();
@@ -159,6 +182,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         };
         vp.setAdapter(myAdapter);
+        vp.setOffscreenPageLimit(2);
     }
 
     public void animate(){

@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.mezereon.bookexchange.Fragment.TalkFragment"
     android:background="#FFFFFF">
     <android.support.v7.widget.RecyclerView
@@ -10,5 +11,17 @@
         android:id="@+id/talk">
 
     </android.support.v7.widget.RecyclerView>
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/spin_kit2"
+        style="@style/SpinKitView.CubeGrid"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        app:SpinKit_Color="#0277bd"
+        android:layout_marginTop="231dp"
+        android:layout_below="@+id/recycle"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

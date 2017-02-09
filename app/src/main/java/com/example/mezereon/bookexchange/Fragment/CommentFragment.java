@@ -1,5 +1,10 @@
 package com.example.mezereon.bookexchange.Fragment;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,73 +18,128 @@ import android.view.ViewGroup;
 import android.widget.TabHost;
 
 import com.example.mezereon.bookexchange.Adapter.NormalRecycleViewAdapter;
+import com.example.mezereon.bookexchange.Component.DaggerAppComponent;
 import com.example.mezereon.bookexchange.HomeActivity;
+import com.example.mezereon.bookexchange.LoginActivity;
+import com.example.mezereon.bookexchange.Module.Article;
+import com.example.mezereon.bookexchange.Module.Book;
 import com.example.mezereon.bookexchange.R;
+import com.github.ybq.android.spinkit.SpinKitView;
+
+import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.Retrofit;
+import retrofit2.http.GET;
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link CommentFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CommentFragment extends Fragment implements
         TabHost.TabContentFactory, GestureDetector.OnGestureListener {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private GestureDetector detector;
+    private View v;
+    //避免ViewPager在一开始创建
+    private boolean hasLazyLoad = false;
 
     @Bind(R.id.recycle)
     RecyclerView comment;
+    @Bind(R.id.spin_kit)
+    SpinKitView spinKitView;
+
+    @Inject
+    Retrofit retrofit;
     public CommentFragment() {
         // Required empty public constructor
     }
 
+    public void setHasLazyLoad(boolean hasLazyLoad) {
+        this.hasLazyLoad = hasLazyLoad;
+    }
+
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CommentFragment.
+     * 懒加载,防止ViewPager重复创建
      */
-    // TODO: Rename and change types and number of parameters
-    public static CommentFragment newInstance(String param1, String param2) {
-        CommentFragment fragment = new CommentFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    protected void onLazyLoad() {
+
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (getUserVisibleHint() && !hasLazyLoad) {
+            onLazyLoad();
+            hasLazyLoad = true;
         }
-
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        hasLazyLoad = false;
+    }
+
+    public interface GetArticleService {
+        @GET("getArticleInfo.php")
+        Observable<List<Article>> getAllArticles();
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v=inflater.inflate(R.layout.fragment_comment, container, false);
+        v=inflater.inflate(R.layout.fragment_comment, container, false);
+        DaggerAppComponent.builder().build().inject(this);
         ButterKnife.bind(this,v);
-        comment.setLayoutManager(new LinearLayoutManager(v.getContext()));//这里用线性显示 类似于listview
+        comment.setLayoutManager(new LinearLayoutManager(v.getContext()));
         comment.setAdapter(new NormalRecycleViewAdapter(v.getContext()));
+        comment.setVisibility(View.GONE);
+        spinKitView.setVisibility(View.VISIBLE);
+        GetArticleService getBookService=retrofit.create(GetArticleService.class);
+        Subscription subscription=getBookService.getAllArticles()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Article>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("error",e.toString());
+                    }
+
+                    @Override
+                    public void onNext(List<Article> articles) {
+                        ObjectAnimator animator1 = ObjectAnimator.ofFloat(spinKitView, "alpha", 1f,0f);
+                        AnimatorSet animSet = new AnimatorSet();
+                        animSet.setDuration(1000);
+                        animSet.addListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                comment.setVisibility(View.VISIBLE);
+                                spinKitView.setVisibility(View.GONE);
+                                ObjectAnimator animator2 = ObjectAnimator.ofFloat(comment, "alpha", 0f,1f);
+                                AnimatorSet animSet = new AnimatorSet();
+                                animSet.play(animator2);
+                                animSet.setDuration(1000);
+                                animSet.start();
+                            }
+                        });
+                        animSet.start();
+                        NormalRecycleViewAdapter normalRecycleViewAdapter=new NormalRecycleViewAdapter(v.getContext());
+                        normalRecycleViewAdapter.setArticles(articles);
+                        comment.setAdapter(normalRecycleViewAdapter);
+                    }
+                });
 
         final GestureDetector mGestureDetector = new GestureDetector(
                 getActivity(), this);
@@ -97,9 +157,11 @@ public class CommentFragment extends Fragment implements
     }
 
 
-
-
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
+    }
 
     @Override
     public boolean onDown(MotionEvent arg0) {
@@ -119,7 +181,6 @@ public class CommentFragment extends Fragment implements
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
                             float distanceY) {
-        Log.d("tag","Scrolling!");
         if(distanceY>0){
             HomeActivity homeActivity=(HomeActivity)getActivity();
             homeActivity.animate();
