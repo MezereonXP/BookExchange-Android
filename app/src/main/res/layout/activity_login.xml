@@ -95,7 +95,7 @@
             android:layout_height="match_parent"
             android:id="@+id/textInputEditText"
             android:hint="请输入账号："
-            android:inputType="phone"
+            android:inputType="text"
             android:textColorHint="#FFFFFF"
             android:layout_above="@+id/appCompatButton"
             android:layout_alignLeft="@+id/textInputLayout"
@@ -167,4 +167,16 @@
         android:visibility="invisible"
         android:layout_alignTop="@+id/button"
         android:layout_alignEnd="@+id/textView" />
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/spin_kit3"
+        style="@style/SpinKitView.WanderingCubes"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        app:SpinKit_Color="#0277bd"
+        android:layout_marginTop="231dp"
+        android:layout_below="@+id/recycle"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

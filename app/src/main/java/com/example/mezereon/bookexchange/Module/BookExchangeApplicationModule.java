@@ -1,5 +1,8 @@
 package com.example.mezereon.bookexchange.Module;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -17,12 +20,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class BookExchangeApplicationModule {
 
 
+
     @Provides
     @Singleton
     Retrofit provideRetrofit() {
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
         return new Retrofit.Builder().client(new OkHttpClient())
                 .baseUrl("http://xplovesaber.top/bookEx/")
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
     }

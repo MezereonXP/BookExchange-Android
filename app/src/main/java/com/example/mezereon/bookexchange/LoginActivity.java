@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,7 +23,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mezereon.bookexchange.Component.DaggerAppComponent;
+import com.example.mezereon.bookexchange.Fragment.CommentFragment;
+import com.example.mezereon.bookexchange.Module.Article;
 import com.example.mezereon.bookexchange.Module.Book;
+import com.example.mezereon.bookexchange.Module.User;
+import com.github.ybq.android.spinkit.SpinKitView;
+import com.google.gson.stream.JsonReader;
+
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -33,10 +41,13 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func0;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class LoginActivity extends AppCompatActivity {
@@ -64,18 +75,35 @@ public class LoginActivity extends AppCompatActivity {
     CircleImageView white;
     @Bind(R.id.button2)
     Button btn_logIn;
+    @Bind(R.id.spin_kit3)
+    SpinKitView spinKitView;
 
 
+    @Inject
+    Retrofit retrofit;
 
     private  ObjectAnimator animator=new ObjectAnimator();
     private AnimatorSet animSet=new AnimatorSet();
 
 
+    public interface LoginService {
+        @GET("getInfo.php")
+        Observable<List<User>> login(@Query("username") String username);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        DaggerAppComponent.builder().build().inject(this);
+
+        SharedPreferences sp=this.getSharedPreferences("USERINFO",MODE_PRIVATE);
+        if(!sp.getString("USERNAME","none").equals("none")){
+            Intent intent=new Intent();
+            intent.setClass(LoginActivity.this,HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,10 +181,69 @@ public class LoginActivity extends AppCompatActivity {
                 animSet.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        Intent intent=new Intent();
-                        intent.setClass(LoginActivity.this,HomeActivity.class);
-                        startActivity(intent);
-                        finish();
+                        spinKitView.setVisibility(View.VISIBLE);
+                        ObjectAnimator animator1 = ObjectAnimator.ofFloat(spinKitView, "alpha", 0f,1f);
+                        AnimatorSet animSet = new AnimatorSet();
+                        animSet.play(animator1);
+                        animSet.addListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                final LoginService loginService=retrofit.create(LoginService.class);
+                                Subscription subscription=loginService.login(name.getEditText().getText().toString())
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(new Subscriber<List<User>>() {
+                                            @Override
+                                            public void onCompleted() {
+
+                                            }
+
+                                            @Override
+                                            public void onError(Throwable e) {
+                                                Log.d("error",e.toString());
+                                            }
+
+                                            @Override
+                                            public void onNext(List<User> s) {
+                                                spinKitView.setVisibility(View.INVISIBLE);
+                                                if(!s.get(0).getPassword().equals(pwd.getEditText().getText().toString())){
+                                                    Toast.makeText(LoginActivity.this,"Failed!",Toast.LENGTH_SHORT).show();
+                                                    ObjectAnimator animator1 = ObjectAnimator.ofFloat(white, "alpha", 1f,0f);
+                                                    AnimatorSet animSet = new AnimatorSet();
+                                                    animSet.addListener(new AnimatorListenerAdapter() {
+                                                        @Override
+                                                        public void onAnimationEnd(Animator animation) {
+                                                            white.setVisibility(View.INVISIBLE);
+                                                            btn_signIn.setVisibility(View.VISIBLE);
+                                                            pwd.setErrorEnabled(true);
+                                                            pwd.setError("请输入正确的密码");
+                                                        }
+                                                    });
+                                                    animSet.play(animator1);
+                                                    animSet.start();
+                                                }else{
+                                                    Toast.makeText(LoginActivity.this,"Success!",Toast.LENGTH_SHORT).show();
+                                                    SharedPreferences sp=LoginActivity.this.getSharedPreferences("USERINFO",MODE_PRIVATE);
+                                                    SharedPreferences.Editor editor=sp.edit();
+                                                    editor.putString("USERNAME",s.get(0).getUsername());
+                                                    editor.putString("USERID",s.get(0).getId()+"");
+                                                    editor.putString("USERSRC",s.get(0).getSrc());
+                                                    editor.putString("USERSIGNATRUE",s.get(0).getSignatrue());
+                                                    editor.putString("USERSEX",s.get(0).getSex());
+                                                    editor.commit();
+                                                    Intent intent=new Intent();
+                                                    intent.setClass(LoginActivity.this,HomeActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                            }
+                                        });
+                            }
+                        });
+                        animSet.setDuration(1000);
+                        animSet.start();
+
+
                     }
                 });
                 animSet.start();
