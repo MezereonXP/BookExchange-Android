@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_read"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.mezereon.bookexchange.ReadActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar2"
+        android:elevation="10dp"
+        android:background="#0277bd"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="文章"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:id="@+id/readtitle"/>
+        <TextView
+            android:layout_marginLeft="250dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#0277bd"
+            android:elevation="6dp"
+            android:text="评论"
+            android:textSize="20sp"
+            android:textColor="#FFFFFF"
+            android:layout_alignBottom="@+id/toolbar2"
+            android:layout_alignParentEnd="true" />
+
+    </android.support.v7.widget.Toolbar>
+<ScrollView
+    android:layout_below="@+id/toolbar2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="30dp">
+
+        <TextView
+            android:text="TextView"
+            android:textColor="#101010"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView14"
+            android:layout_alignStart="@+id/textView14"
+            android:layout_marginTop="13dp"
+            android:id="@+id/textView15" />
+
+        <TextView
+            android:text="TextView"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#101010"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView14"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
+</ScrollView>
+
+
+
+</RelativeLayout>

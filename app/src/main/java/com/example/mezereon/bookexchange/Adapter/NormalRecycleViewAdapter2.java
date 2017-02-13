@@ -1,6 +1,7 @@
 package com.example.mezereon.bookexchange.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.example.mezereon.bookexchange.Module.Article;
 import com.example.mezereon.bookexchange.Module.Forum;
 import com.example.mezereon.bookexchange.R;
+import com.example.mezereon.bookexchange.ReadActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -65,6 +67,15 @@ public class NormalRecycleViewAdapter2 extends RecyclerView.Adapter<NormalRecycl
             @Override
             public void onClick(View v) {
                 Toast.makeText(mContext,"concern "+position,Toast.LENGTH_SHORT).show();
+            }
+        });
+        holder.content.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent();
+                intent.putExtra("position2",position);
+                intent.setClass(mContext, ReadActivity.class);
+                mContext.startActivity(intent);
             }
         });
     }

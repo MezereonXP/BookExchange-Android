@@ -1,6 +1,7 @@
 package com.example.mezereon.bookexchange.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -9,15 +10,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mezereon.bookexchange.Module.Article;
 import com.example.mezereon.bookexchange.Module.Book;
 import com.example.mezereon.bookexchange.R;
+import com.example.mezereon.bookexchange.ReadActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -67,6 +72,16 @@ public class NormalRecycleViewAdapter extends RecyclerView.Adapter<NormalRecycle
                 Toast.makeText(mContext,"concern "+position,Toast.LENGTH_SHORT).show();
             }
         });
+        holder.content.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent();
+                intent.putExtra("position",position);
+                intent.setClass(mContext, ReadActivity.class);
+                mContext.startActivity(intent);
+            }
+        });
+
     }
 
     @Override
@@ -96,6 +111,8 @@ public class NormalRecycleViewAdapter extends RecyclerView.Adapter<NormalRecycle
         Button concern;
         @Bind(R.id.cardView)
         CardView card;
+        @Bind(R.id.commentLayout)
+        RelativeLayout relativeLayout;
 
         NormalTextViewHolder(View view) {
             super(view);
@@ -106,6 +123,13 @@ public class NormalRecycleViewAdapter extends RecyclerView.Adapter<NormalRecycle
                     Log.d("NormalTextViewHolder", "onClick--> position = " + getPosition());
                 }
             });
+            relativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("NormalTextViewHolder", "onClick--> position = " + getPosition());
+                }
+            });
+
         }
     }
 }

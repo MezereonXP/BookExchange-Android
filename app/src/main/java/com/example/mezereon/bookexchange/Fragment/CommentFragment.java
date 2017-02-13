@@ -23,6 +23,7 @@ import com.example.mezereon.bookexchange.HomeActivity;
 import com.example.mezereon.bookexchange.LoginActivity;
 import com.example.mezereon.bookexchange.Module.Article;
 import com.example.mezereon.bookexchange.Module.Book;
+import com.example.mezereon.bookexchange.MyApp;
 import com.example.mezereon.bookexchange.R;
 import com.github.ybq.android.spinkit.SpinKitView;
 
@@ -119,6 +120,7 @@ public class CommentFragment extends Fragment implements
 
                     @Override
                     public void onNext(List<Article> articles) {
+                        MyApp.getInstance().setArticles(articles);
                         ObjectAnimator animator1 = ObjectAnimator.ofFloat(spinKitView, "alpha", 1f,0f);
                         AnimatorSet animSet = new AnimatorSet();
                         animSet.setDuration(1000);

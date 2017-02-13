@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.mezereon.bookexchange.Adapter.MyRecycleViewAdapter;
 import com.example.mezereon.bookexchange.Adapter.NormalRecycleViewAdapter;
@@ -35,6 +36,10 @@ public class SelfFragment extends Fragment {
     ImageView bg;
     @Bind(R.id.userpic)
     CircleImageView pic;
+    @Bind(R.id.textView11)
+    TextView name;
+    @Bind(R.id.textView12)
+    TextView sign;
 
     private boolean hasLazyLoad = false;
     public void setHasLazyLoad(boolean hasLazyLoad) {
@@ -78,6 +83,8 @@ public class SelfFragment extends Fragment {
         OverScrollDecoratorHelper.setUpOverScroll(setting,OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
         SharedPreferences sp=getActivity().getSharedPreferences("USERINFO", Context.MODE_PRIVATE);
         Picasso.with(v.getContext()).load(sp.getString("USERSRC","NONE")).into(pic);
+        name.setText(sp.getString("USERNAME","none"));
+        sign.setText(sp.getString("USERSIGNATRUE","NONE"));
         return v;
     }
 

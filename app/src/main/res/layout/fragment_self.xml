@@ -39,4 +39,28 @@
         android:layout_marginTop="207dp"
         android:id="@+id/setting"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="TextView"
+        android:textColor="#565656"
+        android:textSize="12sp"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView12"
+        android:layout_alignBottom="@+id/userpic"
+        android:layout_alignStart="@+id/textView11"
+        android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:text="TextView"
+        android:textColor="#FFFFFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:id="@+id/textView11"
+        android:layout_marginBottom="11dp"
+        android:layout_above="@+id/textView12"
+        android:layout_toEndOf="@+id/userpic" />
 </RelativeLayout>
