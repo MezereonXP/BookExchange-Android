@@ -19,6 +19,7 @@ import com.example.mezereon.bookexchange.Adapter.NormalRecycleViewAdapter2;
 import com.example.mezereon.bookexchange.Component.DaggerAppComponent;
 import com.example.mezereon.bookexchange.Module.Article;
 import com.example.mezereon.bookexchange.Module.Forum;
+import com.example.mezereon.bookexchange.MyApp;
 import com.example.mezereon.bookexchange.R;
 import com.github.ybq.android.spinkit.SpinKitView;
 
@@ -89,6 +90,7 @@ public class TalkFragment extends Fragment {
 
                     @Override
                     public void onNext(List<Forum> forums) {
+                        MyApp.getInstance().setForums(forums);
                         NormalRecycleViewAdapter2 normalRecycleViewAdapter2=new NormalRecycleViewAdapter2(v.getContext());
                         normalRecycleViewAdapter2.setArticles(forums);
                         talk.setAdapter(normalRecycleViewAdapter2);
