@@ -45,9 +45,10 @@ public class CommentFragment extends Fragment implements
         TabHost.TabContentFactory, GestureDetector.OnGestureListener {
 
     private GestureDetector detector;
-    private View v;
+    private View viewOnCommentFragment;
     //避免ViewPager在一开始创建
     private boolean hasLazyLoad = false;
+    private HomeActivity homeActivity=(HomeActivity)getActivity();
 
     @Bind(R.id.recycle)
     RecyclerView comment;
@@ -67,9 +68,7 @@ public class CommentFragment extends Fragment implements
     /**
      * 懒加载,防止ViewPager重复创建
      */
-    protected void onLazyLoad() {
-
-    }
+    protected void onLazyLoad() { }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -96,53 +95,20 @@ public class CommentFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        v=inflater.inflate(R.layout.fragment_comment, container, false);
+        viewOnCommentFragment=inflater.inflate(R.layout.fragment_comment, container, false);
         DaggerAppComponent.builder().build().inject(this);
-        ButterKnife.bind(this,v);
-        comment.setLayoutManager(new LinearLayoutManager(v.getContext()));
-        comment.setAdapter(new NormalRecycleViewAdapter(v.getContext()));
+        ButterKnife.bind(this,viewOnCommentFragment);
+        comment.setLayoutManager(new LinearLayoutManager(viewOnCommentFragment.getContext()));
+        comment.setAdapter(new NormalRecycleViewAdapter(viewOnCommentFragment.getContext()));
         comment.setVisibility(View.GONE);
         spinKitView.setVisibility(View.VISIBLE);
-        GetArticleService getBookService=retrofit.create(GetArticleService.class);
-        Subscription subscription=getBookService.getAllArticles()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Article>>() {
-                    @Override
-                    public void onCompleted() {
+        getTheArticlesFromNetWork();
+        setTheGestureDetector();
+        return viewOnCommentFragment;
+    }
 
-                    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d("error",e.toString());
-                    }
-
-                    @Override
-                    public void onNext(List<Article> articles) {
-                        MyApp.getInstance().setArticles(articles);
-                        ObjectAnimator animator1 = ObjectAnimator.ofFloat(spinKitView, "alpha", 1f,0f);
-                        AnimatorSet animSet = new AnimatorSet();
-                        animSet.setDuration(1000);
-                        animSet.addListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                comment.setVisibility(View.VISIBLE);
-                                spinKitView.setVisibility(View.GONE);
-                                ObjectAnimator animator2 = ObjectAnimator.ofFloat(comment, "alpha", 0f,1f);
-                                AnimatorSet animSet = new AnimatorSet();
-                                animSet.play(animator2);
-                                animSet.setDuration(1000);
-                                animSet.start();
-                            }
-                        });
-                        animSet.start();
-                        NormalRecycleViewAdapter normalRecycleViewAdapter=new NormalRecycleViewAdapter(v.getContext());
-                        normalRecycleViewAdapter.setArticles(articles);
-                        comment.setAdapter(normalRecycleViewAdapter);
-                    }
-                });
-
+    private void setTheGestureDetector() {
         final GestureDetector mGestureDetector = new GestureDetector(
                 getActivity(), this);
         HomeActivity.MyOnTouchListener myOnTouchListener = new HomeActivity.MyOnTouchListener() {
@@ -152,10 +118,58 @@ public class CommentFragment extends Fragment implements
                 return result;
             }
         };
+        homeActivity.registerMyOnTouchListener(myOnTouchListener);
+    }
 
-        ((HomeActivity) getActivity())
-                .registerMyOnTouchListener(myOnTouchListener);
-        return v;
+
+    private void getTheArticlesFromNetWork() {
+        GetArticleService getBookService=retrofit.create(GetArticleService.class);
+        Subscription subscription=getBookService.getAllArticles()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Article>>() {
+                    @Override
+                    public void onCompleted() { }
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("error",e.toString());
+                    }
+                    @Override
+                    public void onNext(List<Article> articles) {
+                        MyApp.getInstance().setArticles(articles);
+                        hideTheSpinKitView();
+                        setTheAdapter(articles);
+                    }
+                });
+    }
+
+    private void setTheAdapter(List<Article> articles) {
+        NormalRecycleViewAdapter normalRecycleViewAdapter=new NormalRecycleViewAdapter(viewOnCommentFragment.getContext());
+        normalRecycleViewAdapter.setArticles(articles);
+        comment.setAdapter(normalRecycleViewAdapter);
+    }
+
+
+    private void hideTheSpinKitView() {
+        ObjectAnimator animator1 = ObjectAnimator.ofFloat(spinKitView, "alpha", 1f,0f);
+        AnimatorSet animSet = new AnimatorSet();
+        animSet.setDuration(MyApp.MIDDLE_DURATION);
+        animSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) { showTheComment(); }
+        });
+        animSet.start();
+    }
+
+
+    private void showTheComment() {
+        comment.setVisibility(View.VISIBLE);
+        spinKitView.setVisibility(View.GONE);
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(comment, "alpha", 0f,1f);
+        AnimatorSet animSet = new AnimatorSet();
+        animSet.play(animator2);
+        animSet.setDuration(MyApp.MIDDLE_DURATION);
+        animSet.start();
     }
 
 
@@ -172,23 +186,18 @@ public class CommentFragment extends Fragment implements
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-                           float velocityY) {
-        return false;
-    }
+                           float velocityY) { return false; }
 
     @Override
-    public void onLongPress(MotionEvent e) {
-    }
+    public void onLongPress(MotionEvent e) { }
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
                             float distanceY) {
         if(distanceY>0){
-            HomeActivity homeActivity=(HomeActivity)getActivity();
-            homeActivity.animate();
+            homeActivity.hideTheToolbarByCommentFragment();
         }else if(distanceY<0){
-            HomeActivity homeActivity=(HomeActivity)getActivity();
-            homeActivity.animate2();
+            homeActivity.showTheToolbarByCommentFragment();
         }
         return false;
     }

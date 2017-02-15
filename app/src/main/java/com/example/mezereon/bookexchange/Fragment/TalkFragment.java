@@ -66,54 +66,83 @@ public class TalkFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v= inflater.inflate(R.layout.fragment_talk, container, false);
+        bindAllViews();
+        injectByDagger();
+        setTheRecycleView();
+        showTheSpinKitView();
+        getTalkFromNetWork();
+        return v;
+    }
+
+    private void bindAllViews() {
         ButterKnife.bind(this,v);
+    }
+
+    private void injectByDagger() {
         DaggerAppComponent.builder().build().inject(this);
+    }
+
+
+    private void showTheSpinKitView() {
+        spinKitView.setVisibility(View.VISIBLE);
+    }
+
+
+    private void setTheRecycleView() {
         talk.setLayoutManager(new LinearLayoutManager(v.getContext()));//这里用线性显示 类似于listview
         talk.setAdapter(new NormalRecycleViewAdapter(v.getContext()));
         talk.setVisibility(View.GONE);
+    }
 
-        spinKitView.setVisibility(View.VISIBLE);
+    private void getTalkFromNetWork() {
         GetForumService getBookService=retrofit.create(GetForumService.class);
         Subscription subscription=getBookService.getAllForums()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Forum>>() {
                     @Override
-                    public void onCompleted() {
-
-                    }
-
+                    public void onCompleted() { }
                     @Override
                     public void onError(Throwable e) {
                         Log.d("error",e.toString());
                     }
-
                     @Override
                     public void onNext(List<Forum> forums) {
                         MyApp.getInstance().setForums(forums);
-                        NormalRecycleViewAdapter2 normalRecycleViewAdapter2=new NormalRecycleViewAdapter2(v.getContext());
-                        normalRecycleViewAdapter2.setArticles(forums);
-                        talk.setAdapter(normalRecycleViewAdapter2);
-                        ObjectAnimator animator1 = ObjectAnimator.ofFloat(spinKitView, "alpha", 1f,0f);
-                        AnimatorSet animSet = new AnimatorSet();
-                        animSet.setDuration(1000);
-                        animSet.addListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                talk.setVisibility(View.VISIBLE);
-                                spinKitView.setVisibility(View.GONE);
-                                ObjectAnimator animator2 = ObjectAnimator.ofFloat(talk, "alpha", 0f,1f);
-                                AnimatorSet animSet = new AnimatorSet();
-                                animSet.play(animator2);
-                                animSet.setDuration(1000);
-                                animSet.start();
-                            }
-                        });
-                        animSet.start();
-
+                        setTheAdapterForRecycleView(forums);
+                        hideTheSpinKitView();
                     }
                 });
-        return v;
+    }
+
+    private void setTheAdapterForRecycleView(List<Forum> forums) {
+        NormalRecycleViewAdapter2 normalRecycleViewAdapter2=new NormalRecycleViewAdapter2(v.getContext());
+        normalRecycleViewAdapter2.setArticles(forums);
+        talk.setAdapter(normalRecycleViewAdapter2);
+    }
+
+    private void hideTheSpinKitView() {
+        ObjectAnimator animator1 = ObjectAnimator.ofFloat(spinKitView, "alpha", 1f,0f);
+        AnimatorSet animSet = new AnimatorSet();
+        animSet.setDuration(MyApp.MIDDLE_DURATION);
+        animSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                showTheTalk();
+            }
+        });
+        animSet.start();
+    }
+
+
+    private void showTheTalk() {
+        talk.setVisibility(View.VISIBLE);
+        spinKitView.setVisibility(View.GONE);
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(talk, "alpha", 0f,1f);
+        AnimatorSet animSet = new AnimatorSet();
+        animSet.play(animator2);
+        animSet.setDuration(MyApp.MIDDLE_DURATION);
+        animSet.start();
     }
 
     @Override

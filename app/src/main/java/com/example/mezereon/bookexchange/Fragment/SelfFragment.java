@@ -42,6 +42,7 @@ public class SelfFragment extends Fragment {
     TextView sign;
 
     private boolean hasLazyLoad = false;
+    private View viewOnSelfFragment;
     public void setHasLazyLoad(boolean hasLazyLoad) {
         this.hasLazyLoad = hasLazyLoad;
     }
@@ -76,16 +77,32 @@ public class SelfFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v= inflater.inflate(R.layout.fragment_self, container, false);
-        ButterKnife.bind(this,v);
-        setting.setLayoutManager(new LinearLayoutManager(v.getContext()));//这里用线性显示 类似于listview
-        setting.setAdapter(new MyRecycleViewAdapter(v.getContext()));
+        viewOnSelfFragment= inflater.inflate(R.layout.fragment_self, container, false);
+        bindAllTheViews();
+        setTheRecycleView();
+        setViewOverScroll();
+        setTheUserInfo();
+        return viewOnSelfFragment;
+    }
+
+    private void bindAllTheViews() {
+        ButterKnife.bind(this,viewOnSelfFragment);
+    }
+
+    private void setTheRecycleView() {
+        setting.setLayoutManager(new LinearLayoutManager(viewOnSelfFragment.getContext()));//这里用线性显示 类似于listview
+        setting.setAdapter(new MyRecycleViewAdapter(viewOnSelfFragment.getContext()));
+    }
+
+    private void setViewOverScroll() {
         OverScrollDecoratorHelper.setUpOverScroll(setting,OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
+    }
+
+    private void setTheUserInfo() {
         SharedPreferences sp=getActivity().getSharedPreferences("USERINFO", Context.MODE_PRIVATE);
-        Picasso.with(v.getContext()).load(sp.getString("USERSRC","NONE")).into(pic);
+        Picasso.with(viewOnSelfFragment.getContext()).load(sp.getString("USERSRC","NONE")).into(pic);
         name.setText(sp.getString("USERNAME","none"));
         sign.setText(sp.getString("USERSIGNATRUE","NONE"));
-        return v;
     }
 
     @Override

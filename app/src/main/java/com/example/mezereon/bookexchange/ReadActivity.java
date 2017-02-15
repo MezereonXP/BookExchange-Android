@@ -20,7 +20,11 @@ public class ReadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read);
-        ButterKnife.bind(this);
+        bindAllTheViews();
+        setTheTitleAndContent();
+    }
+
+    private void setTheTitleAndContent() {
         int position=getIntent().getIntExtra("position",-1);
         int position2=getIntent().getIntExtra("position2",-1);
         if(position!=-1){
@@ -31,7 +35,10 @@ public class ReadActivity extends AppCompatActivity {
             title.setText(MyApp.getInstance().getForums().get(position).getTitle());
             content.setText(Html.fromHtml(MyApp.getInstance().getForums().get(position).getIntroduction()));
         }
+    }
 
+    private void bindAllTheViews() {
+        ButterKnife.bind(this);
     }
 
     @Override

@@ -29,6 +29,7 @@ import com.example.mezereon.bookexchange.Module.Book;
 import com.example.mezereon.bookexchange.Module.User;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.gson.stream.JsonReader;
+import com.jakewharton.rxbinding.view.RxView;
 
 import org.json.JSONObject;
 
@@ -94,9 +95,72 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        ButterKnife.bind(this);
-        DaggerAppComponent.builder().build().inject(this);
+        bindAllTheViews();
+        injectByDagger();
+        isLogin();
+        setClickListenerForViews();
+    }
 
+    private void setClickListenerForViews() {
+        setSignIn();
+        setSignUp();
+        setSignInButton();
+        setLogInButton();
+        setHaveAccountsText();
+    }
+
+    private void setHaveAccountsText() {
+        haveAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeTheLoginButton();
+            }
+        });
+    }
+
+    private void setLogInButton() {
+        btn_logIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expandTheWhiteView();
+            }
+        });
+    }
+
+    private void setSignInButton() {
+        btn_signIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expandTheWhiteView();
+            }
+        });
+    }
+
+    private void setSignUp() {
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { }
+        });
+    }
+
+    private void setSignIn() {
+        signIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTheLoginLayoutFirst();
+            }
+        });
+    }
+
+    private void bindAllTheViews() {
+        ButterKnife.bind(this);
+    }
+
+    private void injectByDagger() {
+        DaggerAppComponent.builder().build().inject(this);
+    }
+
+    private void isLogin() {
         SharedPreferences sp=this.getSharedPreferences("USERINFO",MODE_PRIVATE);
         if(!sp.getString("USERNAME","none").equals("none")){
             Intent intent=new Intent();
@@ -104,184 +168,163 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+    }
 
-        signIn.setOnClickListener(new View.OnClickListener() {
+    private void showTheLoginLayoutFirst() {
+        ObjectAnimator moveIn = ObjectAnimator.ofFloat(title, "translationY", 0f,350f);
+        animator = ObjectAnimator.ofFloat(title, "alpha", 1f, 0f);
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(logo, "scaleY", 1f,0.4f);
+        ObjectAnimator animator3 = ObjectAnimator.ofFloat(logo, "scaleX", 1f,0.4f);
+        ObjectAnimator animator4 = ObjectAnimator.ofFloat(logo, "translationY", 0f,-300f);
+        ObjectAnimator animator5 = ObjectAnimator.ofFloat(layout1, "translationY", 0f,300f);
+        animSet = new AnimatorSet();
+        animSet.play(moveIn).with(animator).with(animator2).with(animator3).with(animator4).with(animator5);
+        animSet.setDuration(MyApp.SHORT_DURATION);
+        animSet.addListener(new AnimatorListenerAdapter() {
             @Override
-            public void onClick(View v) {
-                ObjectAnimator moveIn = ObjectAnimator.ofFloat(title, "translationY", 0f,350f);
-                animator = ObjectAnimator.ofFloat(title, "alpha", 1f, 0f);
-                ObjectAnimator animator2 = ObjectAnimator.ofFloat(logo, "scaleY", 1f,0.4f);
-                ObjectAnimator animator3 = ObjectAnimator.ofFloat(logo, "scaleX", 1f,0.4f);
-                ObjectAnimator animator4 = ObjectAnimator.ofFloat(logo, "translationY", 0f,-300f);
-                ObjectAnimator animator5 = ObjectAnimator.ofFloat(layout1, "translationY", 0f,300f);
-                animSet = new AnimatorSet();
-                animSet.play(moveIn).with(animator).with(animator2).with(animator3).with(animator4).with(animator5);
-                animSet.setDuration(500);
-                animSet.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        //Toast.makeText(LoginActivity.this,"start",Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        //Toast.makeText(LoginActivity.this,"end!",Toast.LENGTH_SHORT).show();
-                        layout1.setVisibility(View.INVISIBLE);
-                        title.setVisibility(View.INVISIBLE);
-                        name.setVisibility(View.VISIBLE);
-                        pwd.setVisibility(View.VISIBLE);
-                        haveAccount.setAlpha(0f);
-                        haveAccount.setVisibility(View.VISIBLE);
-                        btn_signIn.setAlpha(0f);
-                        btn_signIn.setVisibility(View.VISIBLE);
-                        ObjectAnimator animator1 = ObjectAnimator.ofFloat(name, "translationY", 100f,-200f);
-                        ObjectAnimator animator2 = ObjectAnimator.ofFloat(name, "alpha", 0f,1f);
-                        ObjectAnimator animator3 = ObjectAnimator.ofFloat(pwd, "translationY", 200f,-170f);
-                        ObjectAnimator animator4 = ObjectAnimator.ofFloat(pwd, "alpha", 0f,1f);
-                        ObjectAnimator animator5 = ObjectAnimator.ofFloat(haveAccount, "alpha", 0f,1f);
-                        ObjectAnimator animator6 = ObjectAnimator.ofFloat(haveAccount, "translationX", -500f,0f);
-                        ObjectAnimator animator7 = ObjectAnimator.ofFloat(btn_signIn, "translationX", 1600f,0f);
-                        ObjectAnimator animator8 = ObjectAnimator.ofFloat(btn_signIn, "alpha", 0f,1f);
-                        AnimatorSet animSet = new AnimatorSet();
-                        animSet.play(animator1).with(animator2).with(animator3).with(animator4)
-                                    .with(animator5).with(animator6).with(animator7).with(animator8);
-                        animSet.setDuration(500);
-                        animSet.start();
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                       // Toast.makeText(LoginActivity.this,"cancel!",Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-                        //Toast.makeText(LoginActivity.this,"repeat!",Toast.LENGTH_SHORT).show();
-                    }
-                });
-                animSet.start();
+            public void onAnimationEnd(Animator animation) {
+                //Toast.makeText(LoginActivity.this,"end!",Toast.LENGTH_SHORT).show();
+                setTheViewVisibility();
+                showTheLoginLayoutSecond();
             }
         });
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        animSet.start();
+    }
 
+
+    private void showTheLoginLayoutSecond() {
+        ObjectAnimator animator1 = ObjectAnimator.ofFloat(name, "translationY", 100f,-200f);
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(name, "alpha", 0f,1f);
+        ObjectAnimator animator3 = ObjectAnimator.ofFloat(pwd, "translationY", 200f,-170f);
+        ObjectAnimator animator4 = ObjectAnimator.ofFloat(pwd, "alpha", 0f,1f);
+        ObjectAnimator animator5 = ObjectAnimator.ofFloat(haveAccount, "alpha", 0f,1f);
+        ObjectAnimator animator6 = ObjectAnimator.ofFloat(haveAccount, "translationX", -500f,0f);
+        ObjectAnimator animator7 = ObjectAnimator.ofFloat(btn_signIn, "translationX", 1600f,0f);
+        ObjectAnimator animator8 = ObjectAnimator.ofFloat(btn_signIn, "alpha", 0f,1f);
+        AnimatorSet animSet = new AnimatorSet();
+        animSet.play(animator1).with(animator2).with(animator3).with(animator4)
+                .with(animator5).with(animator6).with(animator7).with(animator8);
+        animSet.setDuration(MyApp.SHORT_DURATION);
+        animSet.start();
+    }
+
+    private void setTheViewVisibility() {
+        layout1.setVisibility(View.INVISIBLE);
+        title.setVisibility(View.INVISIBLE);
+        name.setVisibility(View.VISIBLE);
+        pwd.setVisibility(View.VISIBLE);
+        haveAccount.setAlpha(0f);
+        haveAccount.setVisibility(View.VISIBLE);
+        btn_signIn.setAlpha(0f);
+        btn_signIn.setVisibility(View.VISIBLE);
+    }
+
+    private void showTheSpinKitView() {
+        spinKitView.setVisibility(View.VISIBLE);
+        ObjectAnimator animator1 = ObjectAnimator.ofFloat(spinKitView, "alpha", 0f,1f);
+        AnimatorSet animSet = new AnimatorSet();
+        animSet.play(animator1);
+        animSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                getUserInfoFromNetWork();
             }
         });
-        btn_signIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                white.setVisibility(View.VISIBLE);
-                btn_signIn.setVisibility(View.INVISIBLE);
-                ObjectAnimator animator1 = ObjectAnimator.ofFloat(white, "scaleY", 1f,100f);
-                ObjectAnimator animator2 = ObjectAnimator.ofFloat(white, "scaleX", 1f,100f);
-                AnimatorSet animSet = new AnimatorSet();
-                animSet.play(animator1).with(animator2);
-                animSet.setDuration(500);
-                animSet.addListener(new AnimatorListenerAdapter() {
+        animSet.setDuration(MyApp.MIDDLE_DURATION);
+        animSet.start();
+    }
+
+    private void getUserInfoFromNetWork() {
+        final LoginService loginService=retrofit.create(LoginService.class);
+        Subscription subscription=loginService.login(name.getEditText().getText().toString())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<User>>() {
                     @Override
-                    public void onAnimationEnd(Animator animation) {
-                        spinKitView.setVisibility(View.VISIBLE);
-                        ObjectAnimator animator1 = ObjectAnimator.ofFloat(spinKitView, "alpha", 0f,1f);
-                        AnimatorSet animSet = new AnimatorSet();
-                        animSet.play(animator1);
-                        animSet.addListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                final LoginService loginService=retrofit.create(LoginService.class);
-                                Subscription subscription=loginService.login(name.getEditText().getText().toString())
-                                        .subscribeOn(Schedulers.io())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe(new Subscriber<List<User>>() {
-                                            @Override
-                                            public void onCompleted() {
-
-                                            }
-
-                                            @Override
-                                            public void onError(Throwable e) {
-                                                Log.d("error",e.toString());
-                                            }
-
-                                            @Override
-                                            public void onNext(List<User> s) {
-                                                spinKitView.setVisibility(View.INVISIBLE);
-                                                if(!s.get(0).getPassword().equals(pwd.getEditText().getText().toString())){
-                                                    Toast.makeText(LoginActivity.this,"Failed!",Toast.LENGTH_SHORT).show();
-                                                    ObjectAnimator animator1 = ObjectAnimator.ofFloat(white, "alpha", 1f,0f);
-                                                    AnimatorSet animSet = new AnimatorSet();
-                                                    animSet.addListener(new AnimatorListenerAdapter() {
-                                                        @Override
-                                                        public void onAnimationEnd(Animator animation) {
-                                                            white.setVisibility(View.INVISIBLE);
-                                                            btn_signIn.setVisibility(View.VISIBLE);
-                                                            pwd.setErrorEnabled(true);
-                                                            pwd.setError("请输入正确的密码");
-                                                        }
-                                                    });
-                                                    animSet.play(animator1);
-                                                    animSet.start();
-                                                }else{
-                                                    Toast.makeText(LoginActivity.this,"Success!",Toast.LENGTH_SHORT).show();
-                                                    SharedPreferences sp=LoginActivity.this.getSharedPreferences("USERINFO",MODE_PRIVATE);
-                                                    SharedPreferences.Editor editor=sp.edit();
-                                                    editor.putString("USERNAME",s.get(0).getUsername());
-                                                    editor.putString("USERID",s.get(0).getId()+"");
-                                                    editor.putString("USERSRC",s.get(0).getSrc());
-                                                    editor.putString("USERSIGNATRUE",s.get(0).getSignatrue());
-                                                    editor.putString("USERSEX",s.get(0).getSex());
-                                                    editor.commit();
-                                                    Intent intent=new Intent();
-                                                    intent.setClass(LoginActivity.this,HomeActivity.class);
-                                                    startActivity(intent);
-                                                    finish();
-                                                }
-                                            }
-                                        });
-                            }
-                        });
-                        animSet.setDuration(1000);
-                        animSet.start();
-
-
+                    public void onCompleted() { }
+                    @Override
+                    public void onError(Throwable e) { Log.d("error",e.toString()); }
+                    @Override
+                    public void onNext(List<User> userList) {
+                        hideTheSpinKitView();
+                        judgeTheInput(userList);
                     }
                 });
-                animSet.start();
+    }
+
+    private void hideTheSpinKitView() {
+        spinKitView.setVisibility(View.INVISIBLE);
+    }
 
 
-            }
-        });
-        btn_logIn.setOnClickListener(new View.OnClickListener() {
+    private void judgeTheInput(List<User> userList) {
+        if(!userList.get(0).getPassword().equals(pwd.getEditText().getText().toString())){
+            Toast.makeText(LoginActivity.this,"Failed!",Toast.LENGTH_SHORT).show();
+            showWrong();
+        }else{
+            Toast.makeText(LoginActivity.this,"Success!",Toast.LENGTH_SHORT).show();
+            putTheInfoOfUserToSharePreference(userList);
+            turnToHomePage();
+        }
+    }
+
+    private void showWrong() {
+        ObjectAnimator animator1 = ObjectAnimator.ofFloat(white, "alpha", 1f,0f);
+        AnimatorSet animSet = new AnimatorSet();
+        animSet.addListener(new AnimatorListenerAdapter() {
             @Override
-            public void onClick(View v) {
-                white.setVisibility(View.VISIBLE);
-                btn_logIn.setVisibility(View.INVISIBLE);
-                ObjectAnimator animator1 = ObjectAnimator.ofFloat(white, "scaleY", 1f,100f);
-                ObjectAnimator animator2 = ObjectAnimator.ofFloat(white, "scaleX", 1f,100f);
-                AnimatorSet animSet = new AnimatorSet();
-                animSet.play(animator1).with(animator2);
-                animSet.setDuration(500);
-                animSet.start();
+            public void onAnimationEnd(Animator animation) {
+                white.setVisibility(View.INVISIBLE);
+                btn_signIn.setVisibility(View.VISIBLE);
+                pwd.setErrorEnabled(true);
+                pwd.setError("请输入正确的密码");
             }
         });
+        animSet.play(animator1);
+        animSet.start();
+    }
 
-        haveAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                btn_logIn.setAlpha(0f);
-                btn_logIn.setVisibility(View.VISIBLE);
-                ObjectAnimator animator7 = ObjectAnimator.ofFloat(btn_signIn, "translationX", 0f,1600f);
-                ObjectAnimator animator8 = ObjectAnimator.ofFloat(btn_signIn, "alpha", 1f,0f);
-                ObjectAnimator animator3 = ObjectAnimator.ofFloat(haveAccount, "alpha", 1f,0f);
-                ObjectAnimator animator1 = ObjectAnimator.ofFloat(btn_logIn, "translationX", 1600f,0f);
-                ObjectAnimator animator2 = ObjectAnimator.ofFloat(btn_logIn, "alpha", 0f,1f);
-                AnimatorSet animSet = new AnimatorSet();
-                animSet.play(animator7).with(animator8).with(animator3).before(animator1).before(animator2);
-                animSet.setDuration(500);
-                animSet.start();
-            }
-        });
+    private void turnToHomePage() {
+        Intent intent=new Intent();
+        intent.setClass(LoginActivity.this,HomeActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void putTheInfoOfUserToSharePreference(List<User> userList) {
+        SharedPreferences sp=LoginActivity.this.getSharedPreferences("USERINFO",MODE_PRIVATE);
+        SharedPreferences.Editor editor=sp.edit();
+        editor.putString("USERNAME",userList.get(0).getUsername());
+        editor.putString("USERID",userList.get(0).getId()+"");
+        editor.putString("USERSRC",userList.get(0).getSrc());
+        editor.putString("USERSIGNATRUE",userList.get(0).getSignatrue());
+        editor.putString("USERSEX",userList.get(0).getSex());
+        editor.commit();
+    }
 
 
+    private void expandTheWhiteView() {
+        white.setVisibility(View.VISIBLE);
+        btn_logIn.setVisibility(View.INVISIBLE);
+        ObjectAnimator animator1 = ObjectAnimator.ofFloat(white, "scaleY", 1f,100f);
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(white, "scaleX", 1f,100f);
+        AnimatorSet animSet = new AnimatorSet();
+        animSet.play(animator1).with(animator2);
+        animSet.setDuration(MyApp.SHORT_DURATION);
+        animSet.start();
+    }
+
+    private void changeTheLoginButton() {
+        btn_logIn.setAlpha(0f);
+        btn_logIn.setVisibility(View.VISIBLE);
+        ObjectAnimator animator7 = ObjectAnimator.ofFloat(btn_signIn, "translationX", 0f,1600f);
+        ObjectAnimator animator8 = ObjectAnimator.ofFloat(btn_signIn, "alpha", 1f,0f);
+        ObjectAnimator animator3 = ObjectAnimator.ofFloat(haveAccount, "alpha", 1f,0f);
+        ObjectAnimator animator1 = ObjectAnimator.ofFloat(btn_logIn, "translationX", 1600f,0f);
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(btn_logIn, "alpha", 0f,1f);
+        AnimatorSet animSet = new AnimatorSet();
+        animSet.play(animator7).with(animator8).with(animator3).before(animator1).before(animator2);
+        animSet.setDuration(MyApp.SHORT_DURATION);
+        animSet.start();
     }
 }

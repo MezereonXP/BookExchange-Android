@@ -21,12 +21,12 @@
                 android:layout_height="match_parent"
                 android:visibility="invisible"
               />
-        <ImageButton
+        <ImageView
             android:background="#00000000"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:visibility="invisible"
-            android:src="@drawable/add"
+            android:src="@mipmap/ic_add_white_36dp"
             android:layout_marginLeft="20dp"
             android:id="@+id/imageView2" />
     </android.support.v7.widget.Toolbar>

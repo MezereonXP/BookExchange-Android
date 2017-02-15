@@ -72,12 +72,16 @@ public class NormalRecycleViewAdapter2 extends RecyclerView.Adapter<NormalRecycl
         holder.content.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent();
-                intent.putExtra("position2",position);
-                intent.setClass(mContext, ReadActivity.class);
-                mContext.startActivity(intent);
+                turnToRead(position);
             }
         });
+    }
+
+    private void turnToRead(int position) {
+        Intent intent=new Intent();
+        intent.putExtra("position2",position);
+        intent.setClass(mContext, ReadActivity.class);
+        mContext.startActivity(intent);
     }
 
     @Override

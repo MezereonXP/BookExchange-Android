@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mezereon.bookexchange.MyApp;
 import com.example.mezereon.bookexchange.R;
 
 import butterknife.Bind;
@@ -63,7 +64,7 @@ public class MyRecycleViewAdapter extends RecyclerView.Adapter<MyRecycleViewAdap
 
     @Override
     public int getItemCount() {
-        return 4;
+        return MyApp.COUNT_OF_SETTING_ITEMS;
     }
 
     public static class MyRecycleViewHolder extends RecyclerView.ViewHolder {

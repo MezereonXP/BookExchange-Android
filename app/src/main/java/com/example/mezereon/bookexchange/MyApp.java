@@ -13,9 +13,25 @@ import java.util.List;
  */
 
 public class MyApp  {
+
+    public static final int SHORT_DURATION=500;
+    public static final int MIDDLE_DURATION=1000;
+    public static final int LONG_DURATION=1500;
+    public static final int COUNT_OF_SETTING_ITEMS=4;
+
+    public static final String COLOR_WHITE="#FFFFFF";
+    public static final String COLOR_TEXT_NOACTIVE="#6B6B6B";
+    public static final String COLOR_TEXT_ACTIVE="#3399cc";
+    public static final String COLOR_STATUSBAR="#01579b";
+
+    public static final String STRING_BOOK_COMMENT="书评";
+    public static final String STRING_TALK="讨论";
+    public static final String STRING_SELF="个人";
+
     private List<Article> articles;
     private  List<Book> books;
     private List<Forum> forums;
+
     public static MyApp instance=new MyApp();
 
     public static MyApp getInstance() {
