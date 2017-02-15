@@ -25,15 +25,15 @@ public class ReadActivity extends AppCompatActivity {
     }
 
     private void setTheTitleAndContent() {
-        int position=getIntent().getIntExtra("position",-1);
-        int position2=getIntent().getIntExtra("position2",-1);
-        if(position!=-1){
-            title.setText(MyApp.getInstance().getArticles().get(position).getTitle());
-            content.setText(Html.fromHtml(MyApp.getInstance().getArticles().get(position).getIntroduction()));
+        int positionFromCommentFragment=getIntent().getIntExtra("position",-1);
+        int positionFromTalkFragment=getIntent().getIntExtra("position2",-1);
+        if(positionFromCommentFragment!=-1){
+            title.setText(MyApp.getInstance().getArticles().get(positionFromCommentFragment).getTitle());
+            content.setText(Html.fromHtml(MyApp.getInstance().getArticles().get(positionFromCommentFragment).getIntroduction()));
         }
-        if(position2!=-1){
-            title.setText(MyApp.getInstance().getForums().get(position).getTitle());
-            content.setText(Html.fromHtml(MyApp.getInstance().getForums().get(position).getIntroduction()));
+        if(positionFromTalkFragment!=-1){
+            title.setText(MyApp.getInstance().getForums().get(positionFromTalkFragment).getTitle());
+            content.setText(Html.fromHtml(MyApp.getInstance().getForums().get(positionFromTalkFragment).getIntroduction()));
         }
     }
 

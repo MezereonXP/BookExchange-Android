@@ -48,7 +48,7 @@ public class CommentFragment extends Fragment implements
     private View viewOnCommentFragment;
     //避免ViewPager在一开始创建
     private boolean hasLazyLoad = false;
-    private HomeActivity homeActivity=(HomeActivity)getActivity();
+    private HomeActivity homeActivity=(HomeActivity)this.getActivity();
 
     @Bind(R.id.recycle)
     RecyclerView comment;
@@ -118,7 +118,11 @@ public class CommentFragment extends Fragment implements
                 return result;
             }
         };
+        if(homeActivity==null){
+            homeActivity= (HomeActivity) getActivity();
+        }
         homeActivity.registerMyOnTouchListener(myOnTouchListener);
+
     }
 
 

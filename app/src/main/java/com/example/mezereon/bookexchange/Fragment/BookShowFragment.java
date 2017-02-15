@@ -16,17 +16,15 @@ import com.example.mezereon.bookexchange.R;
 public class BookShowFragment extends Fragment {
 
     //Constructor of the BookShowFragment
-    public BookShowFragment(){
+    public BookShowFragment(){ }
 
-    }
-
-
+    private View viewOnBookShowFragment;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v= inflater.inflate(R.layout.fragment_self, container, false);
-        return v;
+        viewOnBookShowFragment= inflater.inflate(R.layout.fragment_bookshow, container, false);
+        return viewOnBookShowFragment;
     }
 
 }

@@ -24,6 +24,7 @@ public class MyApp  {
     public static final String COLOR_TEXT_ACTIVE="#3399cc";
     public static final String COLOR_STATUSBAR="#01579b";
 
+    public static final String STRING_BOOK="书籍";
     public static final String STRING_BOOK_COMMENT="书评";
     public static final String STRING_TALK="讨论";
     public static final String STRING_SELF="个人";

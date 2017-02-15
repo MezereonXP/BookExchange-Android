@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mezereon.bookexchange.Component.DaggerAppComponent;
+import com.example.mezereon.bookexchange.Fragment.BookShowFragment;
 import com.example.mezereon.bookexchange.Fragment.CommentFragment;
 import com.example.mezereon.bookexchange.Fragment.SelfFragment;
 import com.example.mezereon.bookexchange.Fragment.TalkFragment;
@@ -69,6 +70,7 @@ public class HomeActivity extends AppCompatActivity {
     private SelfFragment selffragment=new SelfFragment();
     private CommentFragment commentfragment=new CommentFragment();
     private TalkFragment talkfragment=new TalkFragment();
+    private BookShowFragment bookShowFragment=new BookShowFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,15 +112,17 @@ public class HomeActivity extends AppCompatActivity {
         searchView.setVisibility(View.VISIBLE);
         layout_tab.setTabMode(TabLayout.MODE_FIXED);
         layout_tab.setBackgroundColor(Color.parseColor(MyApp.COLOR_WHITE));
-        layout_tab.setSelectedTabIndicatorHeight(1);
+        layout_tab.setSelectedTabIndicatorHeight(6);
         layout_tab.setTabTextColors(Color.parseColor(MyApp.COLOR_TEXT_NOACTIVE),Color.parseColor(MyApp.COLOR_TEXT_ACTIVE));
+        layout_tab.addTab(layout_tab.newTab().setText(MyApp.STRING_BOOK).setIcon(R.drawable.book));
         layout_tab.addTab(layout_tab.newTab().setText(MyApp.STRING_BOOK_COMMENT).setIcon(R.drawable.comment));
         layout_tab.addTab(layout_tab.newTab().setText(MyApp.STRING_TALK).setIcon(R.drawable.talk));
         layout_tab.addTab(layout_tab.newTab().setText(MyApp.STRING_SELF).setIcon(R.drawable.self));
         layout_tab.setupWithViewPager(viewPager);
-        layout_tab.getTabAt(0).setText(MyApp.STRING_BOOK_COMMENT).setIcon(R.drawable.comment);
-        layout_tab.getTabAt(1).setText(MyApp.STRING_TALK).setIcon(R.drawable.talk);
-        layout_tab.getTabAt(2).setText(MyApp.STRING_SELF).setIcon(R.drawable.self);
+        layout_tab.getTabAt(0).setText(MyApp.STRING_BOOK).setIcon(R.drawable.book);
+        layout_tab.getTabAt(1).setText(MyApp.STRING_BOOK_COMMENT).setIcon(R.drawable.comment);
+        layout_tab.getTabAt(2).setText(MyApp.STRING_TALK).setIcon(R.drawable.talk);
+        layout_tab.getTabAt(3).setText(MyApp.STRING_SELF).setIcon(R.drawable.self);
     }
 
     //Set the status bar of the system
@@ -152,6 +156,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void initView() {
         ButterKnife.bind(this);
+        myFragments.add(bookShowFragment);
         myFragments.add(commentfragment);
         myFragments.add(talkfragment);
         myFragments.add(selffragment);
@@ -171,13 +176,13 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void hideTheToolbarByCommentFragment(){
-        if(layout_tab.getSelectedTabPosition()!=2) {
+        if(layout_tab.getSelectedTabPosition()!=3) {
             hideTheToolbar();
         }
     }
 
     public void showTheToolbarByCommentFragment(){
-        if(toolbar.getVisibility()==View.GONE&&layout_tab.getSelectedTabPosition()!=2) {
+        if(toolbar.getVisibility()==View.GONE&&layout_tab.getSelectedTabPosition()!=3) {
             showTheToolbar();
         }
     }
