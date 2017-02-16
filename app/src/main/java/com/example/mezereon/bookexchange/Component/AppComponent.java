@@ -1,12 +1,15 @@
 package com.example.mezereon.bookexchange.Component;
 
 import android.app.Application;
+import android.support.v7.widget.RecyclerView;
 
+import com.example.mezereon.bookexchange.Fragment.BookShowFragment;
 import com.example.mezereon.bookexchange.Fragment.CommentFragment;
 import com.example.mezereon.bookexchange.Fragment.TalkFragment;
 import com.example.mezereon.bookexchange.HomeActivity;
 import com.example.mezereon.bookexchange.LoginActivity;
 import com.example.mezereon.bookexchange.Module.BookExchangeApplicationModule;
+import com.example.mezereon.bookexchange.ReadActivity;
 
 import javax.inject.Singleton;
 
@@ -24,6 +27,8 @@ public interface AppComponent {
     void inject(LoginActivity loginActivity);
     void inject(CommentFragment commentFragment);
     void inject(TalkFragment talkFragment);
+    void inject(BookShowFragment bookShowFragment);
+    void inject(ReadActivity readActivity);
 
     Retrofit retrofit();
 }
