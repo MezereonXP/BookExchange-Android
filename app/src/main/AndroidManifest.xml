@@ -22,7 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".HomeActivity" />
-        <activity android:name=".ReadActivity"></activity>
+        <activity android:name=".ReadActivity" />
+        <activity android:name=".UserInfoActivity"></activity>
     </application>
 
 </manifest>

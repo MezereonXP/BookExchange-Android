@@ -72,7 +72,7 @@ public class NormalRecycleViewAdapter extends RecyclerView.Adapter<NormalRecycle
                 Toast.makeText(mContext,"concern "+position,Toast.LENGTH_SHORT).show();
             }
         });
-        holder.content.setOnClickListener(new View.OnClickListener() {
+        holder.card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 turnToRead(position);
@@ -121,19 +121,6 @@ public class NormalRecycleViewAdapter extends RecyclerView.Adapter<NormalRecycle
         NormalTextViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("NormalTextViewHolder", "onClick--> position = " + getPosition());
-                }
-            });
-            relativeLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("NormalTextViewHolder", "onClick--> position = " + getPosition());
-                }
-            });
-
         }
     }
 }

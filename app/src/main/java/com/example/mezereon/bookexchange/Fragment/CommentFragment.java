@@ -27,12 +27,14 @@ import com.example.mezereon.bookexchange.MyApp;
 import com.example.mezereon.bookexchange.R;
 import com.github.ybq.android.spinkit.SpinKitView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
 import rx.Observable;
@@ -104,9 +106,13 @@ public class CommentFragment extends Fragment implements
         spinKitView.setVisibility(View.VISIBLE);
         getTheArticlesFromNetWork();
         setTheGestureDetector();
+        setViewOverScroll();
         return viewOnCommentFragment;
     }
 
+    private void setViewOverScroll() {
+        OverScrollDecoratorHelper.setUpOverScroll(comment,OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
+    }
 
     private void setTheGestureDetector() {
         final GestureDetector mGestureDetector = new GestureDetector(
@@ -140,9 +146,9 @@ public class CommentFragment extends Fragment implements
                     }
                     @Override
                     public void onNext(List<Article> articles) {
-                        MyApp.getInstance().setArticles(articles);
+                        MyApp.getInstance().setArticles(reveseList(articles));
                         hideTheSpinKitView();
-                        setTheAdapter(articles);
+                        setTheAdapter(reveseList(articles));
                     }
                 });
     }
@@ -151,6 +157,15 @@ public class CommentFragment extends Fragment implements
         NormalRecycleViewAdapter normalRecycleViewAdapter=new NormalRecycleViewAdapter(viewOnCommentFragment.getContext());
         normalRecycleViewAdapter.setArticles(articles);
         comment.setAdapter(normalRecycleViewAdapter);
+    }
+
+    private List<Article> reveseList(List<Article> articles) {
+        List<Article> newList=new ArrayList<Article>();
+        int tempCount=0;
+        for(int i=0;i<articles.size();i++){
+            newList.add(articles.get(articles.size()-1-i));
+        }
+        return newList;
     }
 
 

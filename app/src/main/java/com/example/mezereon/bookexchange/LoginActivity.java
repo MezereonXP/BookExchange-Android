@@ -299,18 +299,28 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString("USERSRC",userList.get(0).getSrc());
         editor.putString("USERSIGNATRUE",userList.get(0).getSignatrue());
         editor.putString("USERSEX",userList.get(0).getSex());
+        editor.putString("USERPHONE",userList.get(0).getPhone());
+        editor.putString("USEREMAIL",userList.get(0).getEmail());
+        editor.putString("USERPASSWORD",userList.get(0).getPassword());
         editor.commit();
     }
 
 
     private void expandTheWhiteView() {
         white.setVisibility(View.VISIBLE);
-        btn_logIn.setVisibility(View.INVISIBLE);
+        btn_signIn.setVisibility(View.INVISIBLE);
         ObjectAnimator animator1 = ObjectAnimator.ofFloat(white, "scaleY", 1f,100f);
         ObjectAnimator animator2 = ObjectAnimator.ofFloat(white, "scaleX", 1f,100f);
         AnimatorSet animSet = new AnimatorSet();
         animSet.play(animator1).with(animator2);
         animSet.setDuration(MyApp.SHORT_DURATION);
+        animSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                showTheSpinKitView();
+                getUserInfoFromNetWork();
+            }
+        });
         animSet.start();
     }
 

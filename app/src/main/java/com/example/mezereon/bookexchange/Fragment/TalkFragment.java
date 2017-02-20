@@ -23,12 +23,14 @@ import com.example.mezereon.bookexchange.MyApp;
 import com.example.mezereon.bookexchange.R;
 import com.github.ybq.android.spinkit.SpinKitView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
 import rx.Observable;
@@ -71,7 +73,12 @@ public class TalkFragment extends Fragment {
         setTheRecycleView();
         showTheSpinKitView();
         getTalkFromNetWork();
+        setViewOverScroll();
         return v;
+    }
+
+    private void setViewOverScroll() {
+        OverScrollDecoratorHelper.setUpOverScroll(talk,OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
     }
 
     private void bindAllViews() {
@@ -108,8 +115,8 @@ public class TalkFragment extends Fragment {
                     }
                     @Override
                     public void onNext(List<Forum> forums) {
-                        MyApp.getInstance().setForums(forums);
-                        setTheAdapterForRecycleView(forums);
+                        MyApp.getInstance().setForums(reveseList(forums));
+                        setTheAdapterForRecycleView(reveseList(forums));
                         hideTheSpinKitView();
                     }
                 });
@@ -119,6 +126,15 @@ public class TalkFragment extends Fragment {
         NormalRecycleViewAdapter2 normalRecycleViewAdapter2=new NormalRecycleViewAdapter2(v.getContext());
         normalRecycleViewAdapter2.setArticles(forums);
         talk.setAdapter(normalRecycleViewAdapter2);
+    }
+
+    private List<Forum> reveseList(List<Forum> forums) {
+        List<Forum> newList=new ArrayList<Forum>();
+        int tempCount=0;
+        for(int i=0;i<forums.size();i++){
+            newList.add(forums.get(forums.size()-1-i));
+        }
+        return newList;
     }
 
     private void hideTheSpinKitView() {

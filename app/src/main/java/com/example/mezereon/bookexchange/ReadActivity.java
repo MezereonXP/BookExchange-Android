@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -17,14 +19,18 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.mezereon.bookexchange.Adapter.BookRecycleViewAdapter;
+import com.example.mezereon.bookexchange.Adapter.CommentRecycleViewAdapter;
+import com.example.mezereon.bookexchange.Adapter.NormalRecycleViewAdapter;
 import com.example.mezereon.bookexchange.Component.DaggerAppComponent;
 import com.example.mezereon.bookexchange.Fragment.BookShowFragment;
 import com.example.mezereon.bookexchange.Module.Article;
 import com.example.mezereon.bookexchange.Module.Book;
+import com.example.mezereon.bookexchange.Module.Comment;
 import com.example.mezereon.bookexchange.Module.SimpleArticle;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -55,6 +61,9 @@ public class ReadActivity extends AppCompatActivity {
     TextView userName;
     @Bind(R.id.userPicInRead)
     CircleImageView userPic;
+    @Bind(R.id.commentRecycleView)
+    RecyclerView comments;
+
 
     private int positionFromCommentFragment;
     private int positionFromTalkFragment;
@@ -64,6 +73,16 @@ public class ReadActivity extends AppCompatActivity {
     public interface GetBookService {
         @GET("getArticleContent.php")
         Observable<List<SimpleArticle>> getAllBooks(@Query("id")int id);
+    }
+
+    public interface GetCommentForArticlesService {
+        @GET("getArticleComment.php")
+        Observable<List<Comment>> getCommentForArticles(@Query("id")int id);
+    }
+
+    public interface GetCommentForForumsService {
+        @GET("getForumComment.php")
+        Observable<List<Comment>> getCommentForForums(@Query("id")int id);
     }
 
     @Override
@@ -82,6 +101,77 @@ public class ReadActivity extends AppCompatActivity {
         }else{
             showTheTalk();
         }
+        loadTheComment();
+        setTheScrollView();
+    }
+
+    private void setTheScrollView() {
+        scrollViewInRead.post(new Runnable() {
+            @Override
+            public void run() {
+                scrollViewInRead.fullScroll(ScrollView.FOCUS_UP);
+            }
+        });
+    }
+
+    private void loadTheComment() {
+        initTheRecycleView();
+        if(positionFromCommentFragment!=-1){
+            loadTheCommentForArticles();
+        }else{
+            loadTheCommentForTalks();
+        }
+    }
+
+    private void initTheRecycleView() {
+        comments.setLayoutManager(new LinearLayoutManager(this));
+        comments.setAdapter(new CommentRecycleViewAdapter(this));
+    }
+
+    private void loadTheCommentForTalks() {
+        GetCommentForForumsService getCommentForForumsService=retrofit.create(GetCommentForForumsService.class);
+        Subscription subscription=getCommentForForumsService.getCommentForForums(MyApp.getInstance().getForums().get(positionFromTalkFragment).getId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Comment>>() {
+                    @Override
+                    public void onCompleted() { }
+                    @Override
+                    public void onError(Throwable e) { }
+                    @Override
+                    public void onNext(List<Comment> comments) {
+                        CommentRecycleViewAdapter commentRecycleViewAdapter=new CommentRecycleViewAdapter(ReadActivity.this);
+                        commentRecycleViewAdapter.setComments(reveseList(comments));
+                        ReadActivity.this.comments.setAdapter(commentRecycleViewAdapter);
+                    }
+                });
+    }
+
+    private void loadTheCommentForArticles() {
+        GetCommentForArticlesService getCommentForArticleService=retrofit.create(GetCommentForArticlesService.class);
+        Subscription subscription=getCommentForArticleService.getCommentForArticles(MyApp.getInstance().getArticles().get(positionFromCommentFragment).getId())
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(new Subscriber<List<Comment>>() {
+                                            @Override
+                                            public void onCompleted() { }
+                                            @Override
+                                            public void onError(Throwable e) { }
+                                            @Override
+                                            public void onNext(List<Comment> comments) {
+                                                CommentRecycleViewAdapter commentRecycleViewAdapter=new CommentRecycleViewAdapter(ReadActivity.this);
+                                                commentRecycleViewAdapter.setComments(reveseList(comments));
+                                                ReadActivity.this.comments.setAdapter(commentRecycleViewAdapter);
+                                            }
+                                        });
+    }
+
+    private List<Comment> reveseList(List<Comment> comments) {
+        List<Comment> newList=new ArrayList<Comment>();
+        for(int i=0;i<comments.size();i++){
+            newList.add(comments.get(comments.size()-1-i));
+        }
+        return newList;
     }
 
     private void setTheUserPicAndName() {

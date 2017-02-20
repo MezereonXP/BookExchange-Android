@@ -10,6 +10,7 @@ import com.example.mezereon.bookexchange.HomeActivity;
 import com.example.mezereon.bookexchange.LoginActivity;
 import com.example.mezereon.bookexchange.Module.BookExchangeApplicationModule;
 import com.example.mezereon.bookexchange.ReadActivity;
+import com.example.mezereon.bookexchange.UserInfoActivity;
 
 import javax.inject.Singleton;
 
@@ -29,6 +30,7 @@ public interface AppComponent {
     void inject(TalkFragment talkFragment);
     void inject(BookShowFragment bookShowFragment);
     void inject(ReadActivity readActivity);
+    void inject(UserInfoActivity userInfoActivity);
 
     Retrofit retrofit();
 }

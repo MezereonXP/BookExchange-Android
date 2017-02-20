@@ -18,18 +18,21 @@ import com.example.mezereon.bookexchange.Adapter.BookRecycleViewAdapter;
 import com.example.mezereon.bookexchange.Adapter.NormalRecycleViewAdapter;
 import com.example.mezereon.bookexchange.Adapter.NormalRecycleViewAdapter2;
 import com.example.mezereon.bookexchange.Component.DaggerAppComponent;
+import com.example.mezereon.bookexchange.Module.Article;
 import com.example.mezereon.bookexchange.Module.Book;
 import com.example.mezereon.bookexchange.Module.Forum;
 import com.example.mezereon.bookexchange.MyApp;
 import com.example.mezereon.bookexchange.R;
 import com.github.ybq.android.spinkit.SpinKitView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
 import rx.Observable;
@@ -67,7 +70,12 @@ public class BookShowFragment extends Fragment {
         setTheRecycleView();
         showTheSpinKitView();
         getTalksFromNetWork();
+        setViewOverScroll();
         return viewOnBookShowFragment;
+    }
+
+    private void setViewOverScroll() {
+        OverScrollDecoratorHelper.setUpOverScroll(bookRecycleView,OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
     }
 
     public interface GetBookService {
@@ -89,11 +97,20 @@ public class BookShowFragment extends Fragment {
                     }
                     @Override
                     public void onNext(List<Book> book) {
-                        MyApp.getInstance().setBooks(book);
-                        setTheAdapterForRecycleView(book);
+                        MyApp.getInstance().setBooks(reveseList(book));
+                        setTheAdapterForRecycleView(reveseList(book));
                         hideTheSpinKitView();
                     }
                 });
+    }
+
+    private List<Book> reveseList(List<Book> books) {
+        List<Book> newList=new ArrayList<Book>();
+        int tempCount=0;
+        for(int i=0;i<books.size();i++){
+            newList.add(books.get(books.size()-1-i));
+        }
+        return newList;
     }
 
     private void hideTheSpinKitView() {

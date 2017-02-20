@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
+        android:id="@+id/settingCard"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground">
         >
