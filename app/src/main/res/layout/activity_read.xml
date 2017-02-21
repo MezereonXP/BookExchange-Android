@@ -24,6 +24,7 @@
             android:textSize="20sp"
             android:id="@+id/readtitle"/>
         <TextView
+            android:id="@+id/addComment"
             android:layout_marginLeft="230dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

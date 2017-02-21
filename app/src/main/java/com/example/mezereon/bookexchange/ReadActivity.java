@@ -63,6 +63,8 @@ public class ReadActivity extends AppCompatActivity {
     CircleImageView userPic;
     @Bind(R.id.commentRecycleView)
     RecyclerView comments;
+    @Bind(R.id.addComment)
+    TextView addComment;
 
 
     private int positionFromCommentFragment;

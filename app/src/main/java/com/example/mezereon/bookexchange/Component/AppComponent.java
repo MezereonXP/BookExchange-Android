@@ -3,6 +3,7 @@ package com.example.mezereon.bookexchange.Component;
 import android.app.Application;
 import android.support.v7.widget.RecyclerView;
 
+import com.example.mezereon.bookexchange.AddForumActivity;
 import com.example.mezereon.bookexchange.Fragment.BookShowFragment;
 import com.example.mezereon.bookexchange.Fragment.CommentFragment;
 import com.example.mezereon.bookexchange.Fragment.TalkFragment;
@@ -31,6 +32,7 @@ public interface AppComponent {
     void inject(BookShowFragment bookShowFragment);
     void inject(ReadActivity readActivity);
     void inject(UserInfoActivity userInfoActivity);
+    void inject(AddForumActivity addForumActivity);
 
     Retrofit retrofit();
 }

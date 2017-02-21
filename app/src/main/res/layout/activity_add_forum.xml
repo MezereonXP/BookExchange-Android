@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_add_forum"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.mezereon.bookexchange.AddForumActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar"
+        android:elevation="10dp"
+        android:background="#0277bd">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:text="发表帖子"
+        />
+    </android.support.v7.widget.Toolbar>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_margin="10dp"
+        android:lines="10"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:hint="请输入内容"
+        android:layout_marginTop="28dp"
+        android:id="@+id/editText6"
+        android:layout_below="@+id/editText5"
+        android:gravity="top"
+ />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:hint="请输入帖子标题"
+        android:layout_marginTop="18dp"
+        android:id="@+id/editText5"
+        android:layout_below="@+id/toolbar"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="确认提交"
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:background="#0277bd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/button5" />
+</RelativeLayout>

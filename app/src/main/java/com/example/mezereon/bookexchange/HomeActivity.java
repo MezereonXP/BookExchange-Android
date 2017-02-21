@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -80,6 +81,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         initView();
         manageTheView();
+        setTheAddEvent();
 
         layout_tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -98,6 +100,46 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) { }
         });
+    }
+
+    private void setTheAddEvent() {
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                judgeTheAddEvent();
+            }
+        });
+    }
+
+    private void judgeTheAddEvent() {
+        switch (layout_tab.getSelectedTabPosition()){
+            case 0:
+                turnToAddBook();
+                break;
+            case 1:
+                turnToAddArticle();
+                break;
+            case 2:
+                turnToAddForum();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void turnToAddForum() {
+        Intent intent=new Intent();
+        intent.setClass(this,AddForumActivity.class);
+        startActivity(intent);
+        intent=null;
+    }
+
+    private void turnToAddArticle() {
+
+    }
+
+    private void turnToAddBook() {
+
     }
 
     private void setTransition() {
