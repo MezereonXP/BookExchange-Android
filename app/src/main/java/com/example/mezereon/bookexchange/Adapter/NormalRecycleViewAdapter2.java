@@ -21,7 +21,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -95,21 +95,21 @@ public class NormalRecycleViewAdapter2 extends RecyclerView.Adapter<NormalRecycl
 
 
     public static class NormalTextViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.circleImageView)
+        @BindView(R.id.circleImageView)
         CircleImageView pic;
-        @Bind(R.id.textView5)
+        @BindView(R.id.textView5)
         TextView name;
-        @Bind(R.id.textView7)
+        @BindView(R.id.textView7)
         TextView title;
-        @Bind(R.id.textView8)
+        @BindView(R.id.textView8)
         TextView content;
-        @Bind(R.id.textView9)
+        @BindView(R.id.textView9)
         TextView good;
-        @Bind(R.id.textView10)
+        @BindView(R.id.textView10)
         TextView numOfComment;
-        @Bind(R.id.button3)
+        @BindView(R.id.button3)
         Button concern;
-        @Bind(R.id.cardView)
+        @BindView(R.id.cardView)
         CardView card;
 
         NormalTextViewHolder(View view) {

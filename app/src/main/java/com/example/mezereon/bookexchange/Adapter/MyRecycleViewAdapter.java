@@ -14,12 +14,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mezereon.bookexchange.MyApp;
+import com.example.mezereon.bookexchange.MyExchangeActivity;
 import com.example.mezereon.bookexchange.R;
+import com.example.mezereon.bookexchange.UserBookActivity;
 import com.example.mezereon.bookexchange.UserInfoActivity;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -70,6 +72,19 @@ public class MyRecycleViewAdapter extends RecyclerView.Adapter<MyRecycleViewAdap
     private void setMyBook(MyRecycleViewHolder holder, int position) {
         holder.pic.setImageResource(R.drawable.ic_my_library_books_grey600_36dp);
         holder.name.setText("我的书籍");
+        holder.settingCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                turnUserBook();
+            }
+        });
+    }
+
+    private void turnUserBook() {
+        Intent intent=new Intent();
+        intent.setClass(mContext, UserBookActivity.class);
+        mContext.startActivity(intent);
+        intent=null;
     }
 
     private void setTheExChangeInfo(MyRecycleViewHolder holder, int position) {
@@ -78,8 +93,16 @@ public class MyRecycleViewAdapter extends RecyclerView.Adapter<MyRecycleViewAdap
         holder.settingCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                turnToMyExchange();
             }
         });
+    }
+
+    private void turnToMyExchange() {
+        Intent intent=new Intent();
+        intent.setClass(mContext, MyExchangeActivity.class);
+        mContext.startActivity(intent);
+        intent=null;
     }
 
     private void setTheSelfInfo(MyRecycleViewHolder holder, final int position) {
@@ -106,11 +129,11 @@ public class MyRecycleViewAdapter extends RecyclerView.Adapter<MyRecycleViewAdap
     }
 
     public static class MyRecycleViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.imageView5)
+        @BindView(R.id.imageView5)
         ImageView pic;
-        @Bind(R.id.textView6)
+        @BindView(R.id.textView6)
         TextView name;
-        @Bind(R.id.settingCard)
+        @BindView(R.id.settingCard)
         CardView settingCard;
 
         MyRecycleViewHolder(View view) {

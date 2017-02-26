@@ -1,29 +1,22 @@
-package com.example.mezereon.bookexchange.Fragment;
+package com.example.mezereon.bookexchange;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.example.mezereon.bookexchange.Adapter.BookRecycleViewAdapter;
 import com.example.mezereon.bookexchange.Adapter.NormalRecycleViewAdapter;
-import com.example.mezereon.bookexchange.Adapter.NormalRecycleViewAdapter2;
 import com.example.mezereon.bookexchange.Component.DaggerAppComponent;
-import com.example.mezereon.bookexchange.Module.Article;
+import com.example.mezereon.bookexchange.Fragment.BookShowFragment;
 import com.example.mezereon.bookexchange.Module.Book;
-import com.example.mezereon.bookexchange.Module.Forum;
-import com.example.mezereon.bookexchange.MyApp;
-import com.example.mezereon.bookexchange.R;
 import com.github.ybq.android.spinkit.SpinKitView;
 
 import java.util.ArrayList;
@@ -31,50 +24,41 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-/**
- * Created by Mezereon on 2017/2/15.
- */
+public class UserBookActivity extends AppCompatActivity {
 
-public class BookShowFragment extends Fragment {
 
-    //Constructor of the BookShowFragment
-    public BookShowFragment(){ }
-
-    private View viewOnBookShowFragment;
-
-    @BindView(R.id.recycleViewOfBooks)
+    @BindView(R.id.recycleViewOfBooksInUserBook)
     RecyclerView bookRecycleView;
-    @BindView(R.id.spin_kitInBookShow)
+    @BindView(R.id.spin_kitInUserBook)
     SpinKitView spinKitViewInBookShow;
-    @BindView(R.id.pullRefreshLayoutInBookShow)
+    @BindView(R.id.pullRefreshLayoutInUserBook)
     PullRefreshLayout pullRefreshLayout;
 
     @Inject
     Retrofit retrofit;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        viewOnBookShowFragment= inflater.inflate(R.layout.fragment_bookshow, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_user_book);
         bindAllViews();
         injectByDagger();
         setTheRecycleView();
         showTheSpinKitView();
         getBooksFromNetWork();
         setViewOverScroll();
-        return viewOnBookShowFragment;
     }
 
     private void setViewOverScroll() {
@@ -90,13 +74,13 @@ public class BookShowFragment extends Fragment {
     }
 
     public interface GetBookService {
-        @GET("getAllBook.php")
-        Observable<List<Book>> getAllBooks();
+        @GET("getUserBook.php")
+        Observable<List<Book>> getAllBooks(@Query("username") String username);
     }
 
     private void getBooksFromNetWork() {
         GetBookService getBookService=retrofit.create(GetBookService.class);
-        Subscription subscription=getBookService.getAllBooks()
+        Subscription subscription=getBookService.getAllBooks(getSharedPreferences("USERINFO",MODE_PRIVATE).getString("USERNAME","NONE"))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Book>>() {
@@ -140,7 +124,7 @@ public class BookShowFragment extends Fragment {
     }
 
     private void setTheAdapterForRecycleView(List<Book> book) {
-        BookRecycleViewAdapter bookRecycleViewAdapter=new BookRecycleViewAdapter(viewOnBookShowFragment.getContext());
+        BookRecycleViewAdapter bookRecycleViewAdapter=new BookRecycleViewAdapter(this);
         bookRecycleViewAdapter.setBooks(book);
         bookRecycleView.setAdapter(bookRecycleViewAdapter);
     }
@@ -166,8 +150,8 @@ public class BookShowFragment extends Fragment {
 
 
     private void setTheRecycleView() {
-        bookRecycleView.setLayoutManager(new LinearLayoutManager(viewOnBookShowFragment.getContext()));//这里用线性显示 类似于listview
-        bookRecycleView.setAdapter(new NormalRecycleViewAdapter(viewOnBookShowFragment.getContext()));
+        bookRecycleView.setLayoutManager(new LinearLayoutManager(this));//这里用线性显示 类似于listview
+        bookRecycleView.setAdapter(new NormalRecycleViewAdapter(this));
         bookRecycleView.setVisibility(View.GONE);
     }
 
@@ -176,7 +160,6 @@ public class BookShowFragment extends Fragment {
     }
 
     private void bindAllViews() {
-        ButterKnife.bind(this,viewOnBookShowFragment);
+        ButterKnife.bind(this);
     }
-
 }

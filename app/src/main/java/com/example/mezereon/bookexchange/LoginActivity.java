@@ -37,7 +37,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Retrofit;
@@ -54,29 +54,29 @@ import rx.schedulers.Schedulers;
 public class LoginActivity extends AppCompatActivity {
 
 
-    @Bind(R.id.textView)
+    @BindView(R.id.textView)
     TextView title;
-    @Bind(R.id.textView2)
+    @BindView(R.id.textView2)
     TextView signUp;
-    @Bind(R.id.textView3)
+    @BindView(R.id.textView3)
     TextView signIn;
-    @Bind(R.id.imageView)
+    @BindView(R.id.imageView)
     ImageView logo;
-    @Bind(R.id.layout1)
+    @BindView(R.id.layout1)
     LinearLayout layout1;
-    @Bind(R.id.textInputLayout)
+    @BindView(R.id.textInputLayout)
     TextInputLayout name;
-    @Bind(R.id.textInputLayout2)
+    @BindView(R.id.textInputLayout2)
     TextInputLayout pwd;
-    @Bind(R.id.textView4)
+    @BindView(R.id.textView4)
     TextView haveAccount;
-    @Bind(R.id.button)
+    @BindView(R.id.button)
     Button btn_signIn;
-    @Bind(R.id.white)
+    @BindView(R.id.white)
     CircleImageView white;
-    @Bind(R.id.button2)
+    @BindView(R.id.button2)
     Button btn_logIn;
-    @Bind(R.id.spin_kit3)
+    @BindView(R.id.spin_kit3)
     SpinKitView spinKitView;
 
 

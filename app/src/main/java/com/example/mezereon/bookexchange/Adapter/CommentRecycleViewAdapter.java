@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -64,15 +64,15 @@ public class CommentRecycleViewAdapter extends RecyclerView.Adapter<CommentRecyc
 
     public static class CommentViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.cardViewInComment)
+        @BindView(R.id.cardViewInComment)
         CardView cardView;
-        @Bind(R.id.circleImageViewInComment)
+        @BindView(R.id.circleImageViewInComment)
         CircleImageView circleImageView;
-        @Bind(R.id.userNameInComment)
+        @BindView(R.id.userNameInComment)
         TextView userName;
-        @Bind(R.id.timeInComment)
+        @BindView(R.id.timeInComment)
         TextView time;
-        @Bind(R.id.textViewInComment)
+        @BindView(R.id.textViewInComment)
         TextView content;
 
         CommentViewHolder(View view) {

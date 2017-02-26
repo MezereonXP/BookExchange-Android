@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_add_article"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.mezereon.bookexchange.AddArticleActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar"
+        android:elevation="10dp"
+        android:background="#0277bd">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:text="上传书评"
+            />
+    </android.support.v7.widget.Toolbar>
+
+    <Button
+        android:text="确认提交"
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:background="#0277bd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/button9" />
+
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        app:srcCompat="@drawable/nopic"
+        android:id="@+id/imageView6"
+        android:layout_marginTop="12dp"
+        android:layout_below="@+id/toolbar"
+        android:layout_alignStart="@+id/editText7" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="请输入标题"
+        android:ems="10"
+        android:layout_marginTop="22dp"
+        android:id="@+id/editText7"
+        android:layout_below="@+id/imageView6"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="请输入书名"
+        android:ems="10"
+        android:layout_below="@+id/editText7"
+        android:layout_alignEnd="@+id/editText7"
+        android:layout_marginTop="14dp"
+        android:id="@+id/editText8" />
+
+    <Button
+        android:text="上传图片"
+        android:textColor="#0277bd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:elevation="6dp"
+        android:id="@+id/button8"
+        android:layout_marginTop="41dp"
+        android:layout_alignTop="@+id/imageView6"
+        android:layout_alignEnd="@+id/editText7" />
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        android:inputType="textMultiLine"
+        android:hint="请输入内容"
+        android:gravity="top"
+        android:ems="10"
+        android:id="@+id/editText9"
+        android:layout_below="@+id/editText8"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp" />
+</RelativeLayout>

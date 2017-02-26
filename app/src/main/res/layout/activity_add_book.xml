@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_add_article"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.mezereon.bookexchange.AddArticleActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar"
+        android:elevation="10dp"
+        android:background="#0277bd">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:text="上传书评"
+            />
+    </android.support.v7.widget.Toolbar>
+
+    <Button
+        android:text="确认提交"
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:background="#0277bd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/button9" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="点击选择购买时间"
+        android:textSize="18sp"
+        android:id="@+id/textViewChooseView"
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/editText10" />
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:gravity="top"
+        android:inputType="textPersonName"
+        android:hint="请输入书籍简介"
+        android:maxLines="6"
+        android:layout_below="@+id/spinner2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp"
+        android:id="@+id/editText12" />
+
+    <Spinner
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:id="@+id/spinner"
+        android:layout_below="@+id/textViewChooseView"
+        android:layout_alignStart="@+id/spinner2"
+        android:entries="@array/languages"/>
+
+    <TextView
+        android:text="书籍类型"
+        android:textSize="18sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView20"
+        android:layout_alignBottom="@+id/spinner"
+        android:layout_alignStart="@+id/editText12" />
+
+    <TextView
+        android:text="想要的类型"
+        android:textSize="18sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView21"
+        android:layout_above="@+id/editText12"
+        android:layout_alignStart="@+id/textView20" />
+
+    <Spinner
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        android:id="@+id/spinner2"
+        android:layout_below="@+id/spinner"
+        android:layout_alignEnd="@+id/editText12"
+        android:entries="@array/languages"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="书名"
+        android:ems="10"
+        android:id="@+id/editText10"
+        android:layout_below="@+id/imageView7"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        app:srcCompat="@drawable/nopic"
+        android:id="@+id/imageView7"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/toolbar"
+        android:layout_alignStart="@+id/textView20"
+        android:layout_marginStart="28dp" />
+
+    <Button
+        android:text="上传图片"
+        android:textColor="#0277bd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:elevation="6dp"
+        android:id="@+id/buttonToUpBook"
+        android:layout_alignTop="@+id/imageView7"
+        android:layout_toEndOf="@+id/textViewChooseView"
+        android:layout_marginTop="46dp" />
+
+</RelativeLayout>

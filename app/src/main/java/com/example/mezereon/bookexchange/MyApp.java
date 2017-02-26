@@ -1,9 +1,11 @@
 package com.example.mezereon.bookexchange;
 
 import android.app.Application;
+import android.text.format.Time;
 
 import com.example.mezereon.bookexchange.Module.Article;
 import com.example.mezereon.bookexchange.Module.Book;
+import com.example.mezereon.bookexchange.Module.Exchange;
 import com.example.mezereon.bookexchange.Module.Forum;
 
 import java.util.List;
@@ -32,6 +34,16 @@ public class MyApp  {
     private List<Article> articles;
     private  List<Book> books;
     private List<Forum> forums;
+
+    public List<Exchange> getExchanges() {
+        return exchanges;
+    }
+
+    public void setExchanges(List<Exchange> exchanges) {
+        this.exchanges = exchanges;
+    }
+
+    private List<Exchange> exchanges;
 
     public static MyApp instance=new MyApp();
 
@@ -64,5 +76,17 @@ public class MyApp  {
 
     public void setForums(List<Forum> forums) {
         this.forums = forums;
+    }
+    public String returnTime() {
+        Time t=new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone资料。
+        t.setToNow(); // 取得系统时间。
+        int year = t.year;
+        int month = t.month;
+        int date = t.monthDay;
+        int hour = t.hour; // 0-23
+        int minute = t.minute;
+        int second = t.second;
+        String s = year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
+        return s;
     }
 }

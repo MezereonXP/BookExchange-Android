@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="languages">
+        <item>古典文学</item>
+        <item>科幻小说</item>
+        <item>学术期刊</item>
+        <item>儿童文学</item>
+        <item>教辅资料</item>
+        <item>娱乐杂志</item>
+    </string-array>
+</resources>

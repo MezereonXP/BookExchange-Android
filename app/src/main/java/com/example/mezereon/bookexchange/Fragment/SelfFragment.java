@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,9 +20,11 @@ import com.example.mezereon.bookexchange.R;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.squareup.picasso.Picasso;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import me.everything.android.ui.overscroll.IOverScrollDecor;
+import me.everything.android.ui.overscroll.IOverScrollStateListener;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 /**
@@ -30,15 +33,15 @@ import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 public class SelfFragment extends Fragment {
 
 
-    @Bind(R.id.setting)
+    @BindView(R.id.setting)
     RecyclerView setting;
-    @Bind(R.id.imageView3)
+    @BindView(R.id.imageView3)
     ImageView bg;
-    @Bind(R.id.userpic)
+    @BindView(R.id.userpic)
     CircleImageView pic;
-    @Bind(R.id.textView11)
+    @BindView(R.id.textView11)
     TextView name;
-    @Bind(R.id.textView12)
+    @BindView(R.id.textView12)
     TextView sign;
 
     private boolean hasLazyLoad = false;
@@ -95,7 +98,13 @@ public class SelfFragment extends Fragment {
     }
 
     private void setViewOverScroll() {
-        OverScrollDecoratorHelper.setUpOverScroll(setting,OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
+        IOverScrollDecor decor = OverScrollDecoratorHelper.setUpOverScroll(setting,OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
+        decor.setOverScrollStateListener(new IOverScrollStateListener() {
+            @Override
+            public void onOverScrollStateChange(IOverScrollDecor decor, int oldState, int newState) {
+
+            }
+        });
     }
 
     private void setTheUserInfo() {
@@ -108,7 +117,6 @@ public class SelfFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
 }

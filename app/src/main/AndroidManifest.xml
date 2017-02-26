@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/logo2"
         android:label="@string/app_name"
@@ -24,7 +25,22 @@
         <activity android:name=".HomeActivity" />
         <activity android:name=".ReadActivity" />
         <activity android:name=".UserInfoActivity" />
-        <activity android:name=".AddForumActivity"></activity>
+        <activity android:name=".AddForumActivity" />
+        <activity android:name=".AddCommentActivity" />
+        <activity android:name=".AddArticleActivity" />
+        <activity
+            android:name="cn.finalteam.rxgalleryfinal.ui.activity.MediaActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".AddBookActivity" />
+        <activity android:name=".ExchangeBookActivity" />
+        <activity android:name=".UserBookActivity" />
+        <activity android:name=".MyExchangeActivity"></activity>
     </application>
 
 </manifest>

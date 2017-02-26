@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
@@ -35,7 +36,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Retrofit;
@@ -49,21 +50,21 @@ import rx.schedulers.Schedulers;
 
 public class ReadActivity extends AppCompatActivity {
 
-    @Bind(R.id.textView14)
+    @BindView(R.id.textView14)
     TextView title;
-    @Bind(R.id.textView15)
+    @BindView(R.id.textView15)
     TextView content;
-    @Bind(R.id.spin_kitInRead)
+    @BindView(R.id.spin_kitInRead)
     SpinKitView spinKitViewInRead;
-    @Bind(R.id.scrollViewInRead)
+    @BindView(R.id.scrollViewInRead)
     ScrollView scrollViewInRead;
-    @Bind(R.id.userNameInRead)
+    @BindView(R.id.userNameInRead)
     TextView userName;
-    @Bind(R.id.userPicInRead)
+    @BindView(R.id.userPicInRead)
     CircleImageView userPic;
-    @Bind(R.id.commentRecycleView)
+    @BindView(R.id.commentRecycleView)
     RecyclerView comments;
-    @Bind(R.id.addComment)
+    @BindView(R.id.addComment)
     TextView addComment;
 
 
@@ -105,6 +106,24 @@ public class ReadActivity extends AppCompatActivity {
         }
         loadTheComment();
         setTheScrollView();
+        setTheAddCommentTextView();
+    }
+
+    private void setTheAddCommentTextView() {
+        addComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                turnToAddCommentActivity(positionFromCommentFragment,positionFromTalkFragment);
+            }
+        });
+    }
+
+    private void turnToAddCommentActivity(int positionFromCommentFragment, int positionFromTalkFragment) {
+        Intent intent =new Intent();
+        intent.putExtra("positionFromCommentFragment",positionFromCommentFragment);
+        intent.putExtra("positionFromTalkFragment",positionFromTalkFragment);
+        intent.setClass(this,AddCommentActivity.class);
+        startActivity(intent);
     }
 
     private void setTheScrollView() {

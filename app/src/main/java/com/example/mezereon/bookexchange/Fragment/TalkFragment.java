@@ -7,6 +7,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.example.mezereon.bookexchange.Adapter.NormalRecycleViewAdapter;
 import com.example.mezereon.bookexchange.Adapter.NormalRecycleViewAdapter2;
 import com.example.mezereon.bookexchange.Component.DaggerAppComponent;
@@ -28,8 +30,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.everything.android.ui.overscroll.IOverScrollDecor;
+import me.everything.android.ui.overscroll.IOverScrollStateListener;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
@@ -45,10 +49,12 @@ import rx.schedulers.Schedulers;
 public class TalkFragment extends Fragment {
 
 
-    @Bind(R.id.talk)
+    @BindView(R.id.talk)
     RecyclerView talk;
-    @Bind(R.id.spin_kit2)
+    @BindView(R.id.spin_kit2)
     SpinKitView spinKitView;
+    @BindView(R.id.swipeInTalk)
+    PullRefreshLayout swipeRefreshLayout;
 
     @Inject
     Retrofit retrofit;
@@ -63,6 +69,12 @@ public class TalkFragment extends Fragment {
         Observable<List<Forum>> getAllForums();
     }
 
+    private void setTheRefreshEvent() {
+        swipeRefreshLayout.setColorSchemeColors(R.color.swipe_color_1,
+                R.color.swipe_color_2, R.color.swipe_color_3, R.color.swipe_color_4);
+        swipeRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_SMARTISAN);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -73,12 +85,18 @@ public class TalkFragment extends Fragment {
         setTheRecycleView();
         showTheSpinKitView();
         getTalkFromNetWork();
+        setTheRefreshEvent();
         setViewOverScroll();
         return v;
     }
 
     private void setViewOverScroll() {
-        OverScrollDecoratorHelper.setUpOverScroll(talk,OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
+        swipeRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getTalkFromNetWork();
+            }
+        });
     }
 
     private void bindAllViews() {
@@ -118,6 +136,7 @@ public class TalkFragment extends Fragment {
                         MyApp.getInstance().setForums(reveseList(forums));
                         setTheAdapterForRecycleView(reveseList(forums));
                         hideTheSpinKitView();
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 });
     }
@@ -164,7 +183,6 @@ public class TalkFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
 }

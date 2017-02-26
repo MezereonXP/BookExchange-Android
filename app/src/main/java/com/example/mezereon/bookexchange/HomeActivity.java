@@ -4,8 +4,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -39,7 +42,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
@@ -53,15 +56,15 @@ import rx.schedulers.Schedulers;
 
 public class HomeActivity extends AppCompatActivity {
 
-    @Bind(R.id.tab_layout)
+    @BindView(R.id.tab_layout)
     TabLayout layout_tab;
-    @Bind(R.id.viewpager)
+    @BindView(R.id.viewpager)
     ViewPager viewPager;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.search)
+    @BindView(R.id.search)
     SearchView searchView;
-    @Bind(R.id.imageView2)
+    @BindView(R.id.imageView2)
     ImageView add;
 
     private ArrayList<MyOnTouchListener> onTouchListeners = new ArrayList<MyOnTouchListener>(
@@ -135,11 +138,17 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void turnToAddArticle() {
-
+        Intent intent=new Intent();
+        intent.setClass(this,AddArticleActivity.class);
+        startActivity(intent);
+        intent=null;
     }
 
     private void turnToAddBook() {
-
+        Intent intent=new Intent();
+        intent.setClass(this,AddBookActivity.class);
+        startActivity(intent);
+        intent=null;
     }
 
     private void setTransition() {
@@ -169,8 +178,10 @@ public class HomeActivity extends AppCompatActivity {
 
     //Set the status bar of the system
     private void setTheStatusBar() {
-        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-        getWindow().setStatusBarColor(Color.parseColor(MyApp.COLOR_STATUSBAR));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+            getWindow().setStatusBarColor(Color.parseColor(MyApp.COLOR_STATUSBAR));
+        }
     }
 
     private void hideTheToolbar() {
@@ -248,6 +259,20 @@ public class HomeActivity extends AppCompatActivity {
 
     public interface MyOnTouchListener {
         public boolean onTouch(MotionEvent ev);
+    }
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(HomeActivity.this).setTitle("系统提示")//设置对话框标题
+                .setMessage("确认退出BookExchange？")//设置显示的内5容
+                .setPositiveButton("确定",new DialogInterface.OnClickListener() {//添加确定按钮
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {//确定按钮的响应事件
+                        finish();
+                    }
+                }).setNegativeButton("取消",new DialogInterface.OnClickListener() {//添加返回按钮
+            @Override
+            public void onClick(DialogInterface dialog, int which) { }
+        }).show();//在按键响应事件中显示此对话框
     }
 
 

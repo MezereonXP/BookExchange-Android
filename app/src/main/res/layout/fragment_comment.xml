@@ -1,3 +1,5 @@
+
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,7 +8,11 @@
     android:id="@+id/commentLayout"
     tools:context="com.example.mezereon.bookexchange.Fragment.CommentFragment"
     android:background="#FFFFFF">
-
+<com.baoyz.widget.PullRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/swipeInComment"
+        xmlns:android="http://schemas.android.com/apk/res/android">
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,7 +20,7 @@
         android:id="@+id/recycle">
 
     </android.support.v7.widget.RecyclerView>
-
+</com.baoyz.widget.PullRefreshLayout>
     <com.github.ybq.android.spinkit.SpinKitView
         android:id="@+id/spin_kit"
         style="@style/SpinKitView.CubeGrid"
@@ -27,5 +33,5 @@
         android:layout_below="@+id/recycle"
         android:layout_centerHorizontal="true" />
 
-
 </RelativeLayout>
+

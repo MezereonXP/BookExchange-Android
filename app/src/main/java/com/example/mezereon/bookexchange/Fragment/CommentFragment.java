@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.example.mezereon.bookexchange.Adapter.NormalRecycleViewAdapter;
 import com.example.mezereon.bookexchange.Component.DaggerAppComponent;
 import com.example.mezereon.bookexchange.HomeActivity;
@@ -32,8 +34,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.everything.android.ui.overscroll.IOverScrollDecor;
+import me.everything.android.ui.overscroll.IOverScrollStateListener;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
@@ -52,10 +56,12 @@ public class CommentFragment extends Fragment implements
     private boolean hasLazyLoad = false;
     private HomeActivity homeActivity=(HomeActivity)this.getActivity();
 
-    @Bind(R.id.recycle)
+    @BindView(R.id.recycle)
     RecyclerView comment;
-    @Bind(R.id.spin_kit)
+    @BindView(R.id.spin_kit)
     SpinKitView spinKitView;
+    @BindView(R.id.swipeInComment)
+    PullRefreshLayout swipeRefreshLayout;
 
     @Inject
     Retrofit retrofit;
@@ -100,18 +106,34 @@ public class CommentFragment extends Fragment implements
         viewOnCommentFragment=inflater.inflate(R.layout.fragment_comment, container, false);
         DaggerAppComponent.builder().build().inject(this);
         ButterKnife.bind(this,viewOnCommentFragment);
+        initTheView();
+        getTheArticlesFromNetWork();
+        setTheGestureDetector();
+        setViewOverScroll();
+        setTheRefreshEvent();
+        return viewOnCommentFragment;
+    }
+
+    private void setTheRefreshEvent() {
+        swipeRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_SMARTISAN);
+        swipeRefreshLayout.setColorSchemeColors(R.color.swipe_color_1,
+                R.color.swipe_color_2, R.color.swipe_color_3, R.color.swipe_color_4);
+    }
+
+    private void initTheView() {
         comment.setLayoutManager(new LinearLayoutManager(viewOnCommentFragment.getContext()));
         comment.setAdapter(new NormalRecycleViewAdapter(viewOnCommentFragment.getContext()));
         comment.setVisibility(View.GONE);
         spinKitView.setVisibility(View.VISIBLE);
-        getTheArticlesFromNetWork();
-        setTheGestureDetector();
-        setViewOverScroll();
-        return viewOnCommentFragment;
     }
 
     private void setViewOverScroll() {
-        OverScrollDecoratorHelper.setUpOverScroll(comment,OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
+        swipeRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getTheArticlesFromNetWork();
+            }
+        });
     }
 
     private void setTheGestureDetector() {
@@ -149,6 +171,8 @@ public class CommentFragment extends Fragment implements
                         MyApp.getInstance().setArticles(reveseList(articles));
                         hideTheSpinKitView();
                         setTheAdapter(reveseList(articles));
+                        swipeRefreshLayout.setRefreshing(false);
+
                     }
                 });
     }
@@ -195,7 +219,6 @@ public class CommentFragment extends Fragment implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
     @Override

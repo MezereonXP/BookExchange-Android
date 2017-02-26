@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.mezereon.bookexchange.Component.DaggerAppComponent;
 import com.example.mezereon.bookexchange.Module.Book;
@@ -18,8 +19,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 import retrofit2.Retrofit;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -35,11 +37,11 @@ import rx.schedulers.Schedulers;
 
 public class AddForumActivity extends AppCompatActivity {
 
-    @Bind(R.id.button5)
+    @BindView(R.id.button5)
     Button sendForum;
-    @Bind(R.id.editText5)
+    @BindView(R.id.editText5)
     EditText name;
-    @Bind(R.id.editText6)
+    @BindView(R.id.editText6)
     EditText content;
 
     @Inject
@@ -74,6 +76,7 @@ public class AddForumActivity extends AppCompatActivity {
 
     private void initProgressDialog() {
         progressDialog=new ProgressDialog(this);
+        progressDialog.setIndeterminate(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setMessage("上传帖子中....");
         progressDialog.setTitle("System");
@@ -87,8 +90,10 @@ public class AddForumActivity extends AppCompatActivity {
         sendForum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressDialog.show();
-                send();
+                if (name.getText().length()!=0&&content.getText().length()!=0){
+                    progressDialog.show();
+                    send();
+                }
             }
         });
     }
@@ -108,6 +113,7 @@ public class AddForumActivity extends AppCompatActivity {
                     @Override
                     public void onNext(Void aVoid) {
                         progressDialog.dismiss();
+                        Toasty.success(AddForumActivity.this,"发表成功", Toast.LENGTH_SHORT,true).show();
                         finish();
                     }
                 });
@@ -126,7 +132,7 @@ public class AddForumActivity extends AppCompatActivity {
         int hour = t.hour; // 0-23
         int minute = t.minute;
         int second = t.second;
-        String s = year+"-"+month+"-"+date+"-  "+hour+":"+minute+":"+second;
+        String s = year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
         return s;
     }
 }

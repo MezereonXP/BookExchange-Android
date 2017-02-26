@@ -1,12 +1,19 @@
 package com.example.mezereon.bookexchange;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mezereon.bookexchange.Component.DaggerAppComponent;
@@ -18,7 +25,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
@@ -32,15 +39,23 @@ import rx.schedulers.Schedulers;
 
 public class UserInfoActivity extends AppCompatActivity {
 
-    @Bind(R.id.editText)
+    @BindView(R.id.editText)
     EditText name;
-    @Bind(R.id.editText2)
+    @BindView(R.id.textView16)
+    TextView nameFrontText;
+    @BindView(R.id.editText2)
     EditText sex;
-    @Bind(R.id.editText3)
+    @BindView(R.id.textView17)
+    TextView sexFrontText;
+    @BindView(R.id.editText3)
     EditText email;
-    @Bind(R.id.editText4)
+    @BindView(R.id.textView18)
+    TextView emailFrontText;
+    @BindView(R.id.editText4)
     EditText phone;
-    @Bind(R.id.button4)
+    @BindView(R.id.textView19)
+    TextView phoneFrontText;
+    @BindView(R.id.button4)
     Button changeInfo;
 
     @Inject
@@ -68,10 +83,78 @@ public class UserInfoActivity extends AppCompatActivity {
         getTheSharePreference();
         setTheView();
         setTheClickListener();
+        showTheAnimator1();
+    }
+
+    private void showTheAnimator1() {
+        name.setVisibility(View.VISIBLE);
+        nameFrontText.setVisibility(View.VISIBLE);
+        ObjectAnimator animator1 = ObjectAnimator.ofFloat(name, "translationX", 500f,0f);
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(nameFrontText, "translationX", -500f,0f);
+        AnimatorSet animSet = new AnimatorSet();
+        animSet.play(animator1).with(animator2);
+        animSet.setInterpolator(new DecelerateInterpolator());
+        animSet.setDuration(MyApp.SHORT_DURATION);
+        animSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                showTheAnimator2();
+            }
+        });
+        animSet.start();
+    }
+
+    private void showTheAnimator2() {
+        sex.setVisibility(View.VISIBLE);
+        sexFrontText.setVisibility(View.VISIBLE);
+        ObjectAnimator animator1 = ObjectAnimator.ofFloat(sex, "translationX", 500f,0f);
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(sexFrontText, "translationX", -500f,0f);
+        AnimatorSet animSet = new AnimatorSet();
+        animSet.play(animator1).with(animator2);
+        animSet.setInterpolator(new DecelerateInterpolator());
+        animSet.setDuration(MyApp.SHORT_DURATION);
+        animSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                showTheAnimator3();
+            }
+        });
+        animSet.start();
+    }
+
+    private void showTheAnimator3() {
+        email.setVisibility(View.VISIBLE);
+        emailFrontText.setVisibility(View.VISIBLE);
+        ObjectAnimator animator1 = ObjectAnimator.ofFloat(email, "translationX", 500f,0f);
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(emailFrontText, "translationX", -500f,0f);
+        AnimatorSet animSet = new AnimatorSet();
+        animSet.play(animator1).with(animator2);
+        animSet.setInterpolator(new DecelerateInterpolator());
+        animSet.setDuration(MyApp.SHORT_DURATION);
+        animSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                showTheAnimator4();
+            }
+        });
+        animSet.start();
+    }
+
+    private void showTheAnimator4() {
+        phone.setVisibility(View.VISIBLE);
+        phoneFrontText.setVisibility(View.VISIBLE);
+        ObjectAnimator animator1 = ObjectAnimator.ofFloat(phone, "translationX", 500f,0f);
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(phoneFrontText, "translationX", -500f,0f);
+        AnimatorSet animSet = new AnimatorSet();
+        animSet.play(animator1).with(animator2);
+        animSet.setInterpolator(new DecelerateInterpolator());
+        animSet.setDuration(MyApp.SHORT_DURATION);
+        animSet.start();
     }
 
     private void initTheDialog() {
         progressDialog=new ProgressDialog(this);
+        progressDialog.setIndeterminate(false);
         progressDialog.setMessage("Updating....!");
         progressDialog.setTitle("Info Changing");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -129,6 +212,19 @@ public class UserInfoActivity extends AppCompatActivity {
         sex.setText(sharePreferenceInUserInfo.getString("USERSEX","NONE"));
         email.setText(sharePreferenceInUserInfo.getString("USEREMAIL","NONE"));
         phone.setText(sharePreferenceInUserInfo.getString("USERPHONE","NONE"));
+        changeViewToInvisible();
+    }
+
+    private void changeViewToInvisible() {
+        name.setVisibility(View.INVISIBLE);
+        nameFrontText.setVisibility(View.INVISIBLE);
+        sex.setVisibility(View.INVISIBLE);
+        sexFrontText.setVisibility(View.INVISIBLE);
+        email.setVisibility(View.INVISIBLE);
+        emailFrontText.setVisibility(View.INVISIBLE);
+        phone.setVisibility(View.INVISIBLE);
+        phoneFrontText.setVisibility(View.INVISIBLE);
+
     }
 
     private void getTheSharePreference() {

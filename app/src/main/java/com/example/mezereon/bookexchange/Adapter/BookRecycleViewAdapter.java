@@ -1,6 +1,7 @@
 package com.example.mezereon.bookexchange.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,15 +13,20 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.mezereon.bookexchange.ExchangeBookActivity;
 import com.example.mezereon.bookexchange.Module.Book;
+import com.example.mezereon.bookexchange.Module.User;
 import com.example.mezereon.bookexchange.R;
+import com.example.mezereon.bookexchange.UserBookActivity;
+import com.jakewharton.rxbinding.view.RxView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import rx.functions.Action1;
 
 /**
  * Created by Mezereon on 2017/2/16.
@@ -52,6 +58,23 @@ public class BookRecycleViewAdapter extends RecyclerView.Adapter<BookRecycleView
         Picasso.with(mContext).load(books.get(position).getSrc()).into(holder.bookPic);
         holder.bookname.setText(books.get(position).getBookname());
         holder.bookIntroduce.setText(books.get(position).getIntroduction());
+        setTheClickEvent(holder,position);
+    }
+
+    private void setTheClickEvent(final BookViewHolder holder, final int position) {
+        RxView.clicks(holder.cardView)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        if(!(mContext instanceof UserBookActivity)) {
+                            Intent intent = new Intent();
+                            intent.setClass(mContext, ExchangeBookActivity.class);
+                            intent.putExtra("positionOfBooks", position);
+                            mContext.startActivity(intent);
+                            intent = null;
+                        }
+                    }
+                });
     }
 
     @Override
@@ -65,13 +88,13 @@ public class BookRecycleViewAdapter extends RecyclerView.Adapter<BookRecycleView
 
     public static class BookViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.cardViewInBookItem)
+        @BindView(R.id.cardViewInBookItem)
                 CardView cardView;
-        @Bind(R.id.bookname)
+        @BindView(R.id.bookname)
                 TextView bookname;
-        @Bind(R.id.bookIntroduce)
+        @BindView(R.id.bookIntroduce)
                 TextView bookIntroduce;
-        @Bind(R.id.bookPic)
+        @BindView(R.id.bookPic)
                 ImageView bookPic;
 
         BookViewHolder(View view) {

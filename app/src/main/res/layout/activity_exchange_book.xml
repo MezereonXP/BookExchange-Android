@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:id="@+id/toolbar3"
+        android:background="#0277bd">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:text="书籍交换"
+            />
+    </android.support.v7.widget.Toolbar>
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:id="@+id/textView22"
+        android:layout_alignTop="@+id/imageView8"
+        android:layout_toEndOf="@+id/imageView8"
+        android:layout_marginTop="12dp" />
+
+    <Button
+        android:text="与他/她交换"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:background="#0277bd"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/imageView8"
+        android:id="@+id/button7"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:id="@+id/textView23"
+        android:layout_below="@+id/imageView8"
+        android:layout_alignStart="@+id/imageView8" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView24"
+        android:layout_below="@+id/textView22"
+        android:layout_alignStart="@+id/textView22"
+        android:layout_marginTop="26dp" />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        app:srcCompat="@drawable/nopic"
+        android:elevation="6dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="27dp"
+        android:id="@+id/imageView8"
+        android:layout_below="@+id/toolbar3"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        app:srcCompat="@android:color/black"
+        android:id="@+id/blackMask"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:id="@+id/titleOfYourBooks"
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:text="请选择您用于交换的书籍"
+        android:layout_above="@+id/textView24"
+        android:layout_centerHorizontal="true" />
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:visibility="invisible"
+            android:id="@+id/scrollViewOfYourBooks"
+            android:layout_below="@+id/textView24"
+            android:layout_alignParentStart="true">
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/yourBookList">
+            </android.support.v7.widget.RecyclerView>
+    </ScrollView>
+
+
+</RelativeLayout>
