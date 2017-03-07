@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/toolbarInUserInfo"
         android:elevation="10dp"
-        android:background="#0277bd"
+        android:background="#00B0FF"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true">
         <TextView
@@ -78,7 +78,7 @@
         android:text="确认修改"
         android:textSize="20sp"
         android:textColor="#FFFFFF"
-        android:background="#0277bd"
+        android:background="#00B0FF"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

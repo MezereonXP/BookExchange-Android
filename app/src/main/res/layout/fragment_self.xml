@@ -1,66 +1,20 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.lzy.widget.PullZoomView
+    android:id="@+id/pzv"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.mezereon.bookexchange.Fragment.SelfFragment"
-    android:background="#FFFFFF">
-    <ImageView
+    android:layout_height="match_parent">
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        app:srcCompat="@mipmap/bg3"
-        android:id="@+id/imageView3"
-        android:layout_marginTop="-100dp"
-         />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp"
-        android:id="@+id/userpic"
-        android:src="@mipmap/user"
-        android:layout_marginTop="100dp"
-        />
+        <include layout="@layout/header"></include>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_brightness_high_white_36dp"
-        android:layout_marginEnd="14dp"
-        android:layout_marginTop="13dp"
-        android:id="@+id/imageView4"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
-
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="207dp"
-        android:id="@+id/setting"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:text="TextView"
-        android:textColor="#565656"
-        android:textSize="12sp"
-        android:maxLines="3"
-        android:ellipsize="end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView12"
-        android:layout_alignBottom="@+id/userpic"
-        android:layout_alignStart="@+id/textView11"
-        android:layout_marginBottom="12dp" />
-
-    <TextView
-        android:text="TextView"
-        android:textColor="#FFFFFF"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:id="@+id/textView11"
-        android:layout_marginBottom="11dp"
-        android:layout_above="@+id/textView12"
-        android:layout_toEndOf="@+id/userpic" />
-</RelativeLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/setting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="content" />
+    </LinearLayout>
+</com.lzy.widget.PullZoomView>

@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ import com.example.mezereon.bookexchange.Module.Book;
 import com.example.mezereon.bookexchange.Module.Comment;
 import com.example.mezereon.bookexchange.Module.SimpleArticle;
 import com.github.ybq.android.spinkit.SpinKitView;
+import com.jakewharton.rxbinding.view.RxView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -46,6 +48,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 public class ReadActivity extends AppCompatActivity {
@@ -54,6 +57,8 @@ public class ReadActivity extends AppCompatActivity {
     TextView title;
     @BindView(R.id.textView15)
     TextView content;
+    @BindView(R.id.readtitle)
+    ImageView back;
     @BindView(R.id.spin_kitInRead)
     SpinKitView spinKitViewInRead;
     @BindView(R.id.scrollViewInRead)
@@ -65,7 +70,7 @@ public class ReadActivity extends AppCompatActivity {
     @BindView(R.id.commentRecycleView)
     RecyclerView comments;
     @BindView(R.id.addComment)
-    TextView addComment;
+    ImageView addComment;
 
 
     private int positionFromCommentFragment;
@@ -99,6 +104,7 @@ public class ReadActivity extends AppCompatActivity {
         showTheSpinKitView();
         setTheUserPicAndName();
         setTheTitleAndContent();
+        setTheBackButton();
         if(positionFromCommentFragment!=-1){
             getTheContentFromNetWork();
         }else{
@@ -107,6 +113,16 @@ public class ReadActivity extends AppCompatActivity {
         loadTheComment();
         setTheScrollView();
         setTheAddCommentTextView();
+    }
+
+    private void setTheBackButton() {
+        RxView.clicks(back)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        finish();
+                    }
+                });
     }
 
     private void setTheAddCommentTextView() {
@@ -232,7 +248,7 @@ public class ReadActivity extends AppCompatActivity {
 
     private void setTheStatusBar() {
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-        getWindow().setStatusBarColor(Color.parseColor(MyApp.COLOR_STATUSBAR));
+        getWindow().setStatusBarColor(Color.parseColor(MyApp.COLOR_TOOLBAR));
     }
 
     private void showTheSpinKitView() {

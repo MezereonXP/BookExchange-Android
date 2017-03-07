@@ -4,12 +4,15 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.graphics.Color;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.example.mezereon.bookexchange.Adapter.BookRecycleViewAdapter;
@@ -52,6 +55,7 @@ public class UserBookActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheStatusBar();
         setContentView(R.layout.activity_user_book);
         bindAllViews();
         injectByDagger();
@@ -59,6 +63,14 @@ public class UserBookActivity extends AppCompatActivity {
         showTheSpinKitView();
         getBooksFromNetWork();
         setViewOverScroll();
+    }
+
+    //Set the status bar of the system
+    private void setTheStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+            getWindow().setStatusBarColor(Color.parseColor(MyApp.COLOR_STATUSBAR));
+        }
     }
 
     private void setViewOverScroll() {

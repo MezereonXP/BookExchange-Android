@@ -58,6 +58,7 @@ public class BookRecycleViewAdapter extends RecyclerView.Adapter<BookRecycleView
         Picasso.with(mContext).load(books.get(position).getSrc()).into(holder.bookPic);
         holder.bookname.setText(books.get(position).getBookname());
         holder.bookIntroduce.setText(books.get(position).getIntroduction());
+        holder.timeOfBook.setText(books.get(position).getDate());
         setTheClickEvent(holder,position);
     }
 
@@ -96,6 +97,8 @@ public class BookRecycleViewAdapter extends RecyclerView.Adapter<BookRecycleView
                 TextView bookIntroduce;
         @BindView(R.id.bookPic)
                 ImageView bookPic;
+        @BindView(R.id.timeOfBook)
+                TextView timeOfBook;
 
         BookViewHolder(View view) {
             super(view);

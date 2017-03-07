@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,23 +57,16 @@ public class NormalRecycleViewAdapter extends RecyclerView.Adapter<NormalRecycle
 
     @Override
     public NormalTextViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new NormalTextViewHolder(mLayoutInflater.inflate(R.layout.item_comment, parent, false));
+        return new NormalTextViewHolder(mLayoutInflater.inflate(R.layout.item_book_comment, parent, false));
     }
 
     @Override
     public void onBindViewHolder(NormalTextViewHolder holder, final int position) {
         holder.name.setText(articles.get(position).getUsername());
         Picasso.with(mContext).load(articles.get(position).getAuthorpic()).into(holder.pic);
-        holder.content.setText(Html.fromHtml(articles.get(position).getIntroduction()));
-        holder.good.setText(position+"11 点赞数");
+        Picasso.with(mContext).load(articles.get(position).getSrc()).into(holder.bookPic);
         holder.title.setText(articles.get(position).getTitle());
-        holder.numOfComment.setText(position+"22 评论");
-        holder.concern.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext,"concern "+position,Toast.LENGTH_SHORT).show();
-            }
-        });
+        holder.time.setText(articles.get(position).getTime());
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,24 +94,20 @@ public class NormalRecycleViewAdapter extends RecyclerView.Adapter<NormalRecycle
 
 
     public static class NormalTextViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.circleImageView)
+        @BindView(R.id.circleImageViewInBookComment)
         CircleImageView pic;
-        @BindView(R.id.textView5)
+        @BindView(R.id.nameInBookComment)
         TextView name;
-        @BindView(R.id.textView7)
+        @BindView(R.id.titleInBookComment)
         TextView title;
-        @BindView(R.id.textView8)
-        TextView content;
-        @BindView(R.id.textView9)
-        TextView good;
-        @BindView(R.id.textView10)
-        TextView numOfComment;
-        @BindView(R.id.button3)
-        Button concern;
-        @BindView(R.id.cardView)
+        @BindView(R.id.cardViewInBookComment)
         CardView card;
         @BindView(R.id.commentLayout)
         RelativeLayout relativeLayout;
+        @BindView(R.id.dateInBookComment)
+        TextView time;
+        @BindView(R.id.bookPicInBookComment)
+        ImageView bookPic;
 
         NormalTextViewHolder(View view) {
             super(view);

@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:elevation="10dp"
         android:id="@+id/toolbar3"
-        android:background="#0277bd">
+        android:background="#00B0FF">
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,7 +34,7 @@
         android:text="与他/她交换"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
-        android:background="#0277bd"
+        android:background="#00B0FF"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
@@ -44,9 +44,10 @@
 
     <TextView
         android:text="TextView"
-        android:layout_width="330dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="22dp"
+        android:layout_marginRight="22dp"
         android:id="@+id/textView23"
         android:layout_below="@+id/imageView8"
         android:layout_alignStart="@+id/imageView8" />

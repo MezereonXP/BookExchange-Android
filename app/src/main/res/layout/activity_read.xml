@@ -11,27 +11,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/toolbar2"
-        android:elevation="10dp"
-        android:background="#0277bd"
+
+        android:background="#00B0FF"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:text="文章"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="20dp"
+            android:src="@mipmap/ic_arrow_back_white_24dp"
+            android:background="#00B0FF"
             android:id="@+id/readtitle"/>
-        <TextView
+        <ImageView
             android:id="@+id/addComment"
-            android:layout_marginLeft="230dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#0277bd"
-            android:text="评论"
-            android:textSize="20sp"
-            android:textColor="#FFFFFF"
+            android:layout_marginLeft="280dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="#00B0FF"
+            android:src="@mipmap/ic_subject_white_24dp"
             android:layout_alignBottom="@+id/toolbar2"
             android:layout_alignParentEnd="true" />
     </android.support.v7.widget.Toolbar>
@@ -54,49 +51,67 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="30dp">
-
-        <TextView
-            android:text="TextView"
-            android:textColor="#6c6c6c"
-            android:textSize="16sp"
-            android:layout_width="wrap_content"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/userPicInRead"
-            android:layout_alignStart="@+id/textView14"
-            android:layout_marginTop="13dp"
-            android:id="@+id/textView15" />
+            android:id="@+id/headOfRead"
+            android:paddingBottom="10dp"
+            android:background="#00B0FF">
+
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="25dp"
             android:layout_below="@+id/textView14"
             android:id="@+id/userPicInRead"
             android:src="@mipmap/ic_launcher"/>
 
-        <TextView
-            android:text="TextView"
-            android:textSize="28sp"
-            android:textColor="#000000"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView14"
-            android:layout_alignParentStart="true" />
 
         <TextView
             android:text="TextView"
+            android:textSize="28sp"
+            android:textColor="#FFFFFF"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView14"
+            android:layout_marginTop="19dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/userPicInRead" />
+
+
+        <TextView
+            android:text="TextView"
+            android:textColor="#FFFFFF"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/userNameInRead"
-            android:layout_above="@+id/textView15"
-            android:layout_toEndOf="@+id/userPicInRead"
-            android:layout_marginStart="11dp" />
+            android:layout_marginStart="15dp"
+            android:layout_alignTop="@+id/userPicInRead"
+            android:layout_toEndOf="@+id/userPicInRead" />
+        </RelativeLayout>
+        <TextView
+            android:text="TextView"
+            android:textColor="#6c6c6c"
+            android:textSize="16sp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/headOfRead"
+            android:layout_marginTop="13dp"
+            android:id="@+id/textView15"
+            />
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:id="@+id/commentRecycleView"
-            android:layout_below="@+id/textView13">
+            android:layout_below="@+id/textView13"
+            android:layout_marginRight="25dp"
+            android:layout_marginLeft="25dp">
 
         </android.support.v7.widget.RecyclerView>
 
@@ -104,6 +119,7 @@
             android:text="评论"
             android:textSize="20sp"
             android:textColor="#000000"
+            android:layout_marginLeft="25dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView13"

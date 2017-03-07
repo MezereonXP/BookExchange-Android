@@ -30,7 +30,6 @@
         android:layout_gravity="center_vertical"
         app:SpinKit_Color="#0277bd"
         android:layout_marginTop="231dp"
-        android:layout_below="@+id/recycle"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.example.mezereon.bookexchange.Adapter.BeforeExchangeRecycleViewAdapter;
@@ -31,10 +32,12 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import rx.Observable;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -103,9 +106,14 @@ public class BeforeExchangeFragment extends Fragment {
                 .getSharedPreferences("USERINFO",getActivity().MODE_PRIVATE).getString("USERNAME","NONE"))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Action1<List<Exchange>>() {
+                .subscribe(new Subscriber<List<Exchange>>() {
                     @Override
-                    public void call(List<Exchange> exchanges) {
+                    public void onCompleted() { }
+                    @Override
+                    public void onError(Throwable e) {
+                        Toasty.error(getActivity(),"网络出错", Toast.LENGTH_SHORT).show(); }
+                    @Override
+                    public void onNext(List<Exchange> exchanges) {
                         MyApp.getInstance().setExchanges(reveseList(exchanges));
                         setTheAdapterForRecycleView(reveseList(exchanges));
                         hideTheSpinKitView();

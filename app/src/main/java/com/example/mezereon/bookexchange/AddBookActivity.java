@@ -5,12 +5,15 @@ import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -90,6 +93,7 @@ public class AddBookActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheStatusBar();
         setContentView(R.layout.activity_add_book);
         bindAllTheView();
         injectByDagger();
@@ -98,6 +102,14 @@ public class AddBookActivity extends AppCompatActivity {
         setTheTakePhotoButton();
         setTheSendButton();
         setTheTimeChoose();
+    }
+
+    //Set the status bar of the system
+    private void setTheStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+            getWindow().setStatusBarColor(Color.parseColor(MyApp.COLOR_STATUSBAR));
+        }
     }
 
     private void setTheTimeChoose() {

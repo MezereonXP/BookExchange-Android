@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/toolbarInUserBook"
         android:elevation="10dp"
-        android:background="#0277bd"
+        android:background="#00B0FF"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true">
         <TextView

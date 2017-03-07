@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/toolbar"
         android:elevation="10dp"
-        android:background="#0277bd">
+        android:background="#00B0FF">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

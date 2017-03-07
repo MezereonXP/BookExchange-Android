@@ -6,10 +6,13 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
@@ -76,6 +79,7 @@ public class UserInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheStatusBar();
         setContentView(R.layout.activity_user_info);
         bindAllTheView();
         initTheDialog();
@@ -84,6 +88,14 @@ public class UserInfoActivity extends AppCompatActivity {
         setTheView();
         setTheClickListener();
         showTheAnimator1();
+    }
+
+    //Set the status bar of the system
+    private void setTheStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+            getWindow().setStatusBarColor(Color.parseColor(MyApp.COLOR_STATUSBAR));
+        }
     }
 
     private void showTheAnimator1() {

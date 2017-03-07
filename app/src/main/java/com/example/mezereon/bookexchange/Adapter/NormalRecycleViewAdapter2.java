@@ -63,18 +63,13 @@ public class NormalRecycleViewAdapter2 extends RecyclerView.Adapter<NormalRecycl
         holder.good.setText(position+"11 点赞数");
         holder.title.setText(forums.get(position).getTitle());
         holder.numOfComment.setText(position+"22 评论");
-        holder.concern.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext,"concern "+position,Toast.LENGTH_SHORT).show();
-            }
-        });
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 turnToRead(position);
             }
         });
+        holder.dateInTalk.setText(forums.get(position).getTime());
     }
 
     private void turnToRead(int position) {
@@ -107,10 +102,10 @@ public class NormalRecycleViewAdapter2 extends RecyclerView.Adapter<NormalRecycl
         TextView good;
         @BindView(R.id.textView10)
         TextView numOfComment;
-        @BindView(R.id.button3)
-        Button concern;
         @BindView(R.id.cardView)
         CardView card;
+        @BindView(R.id.dateInTalk)
+        TextView dateInTalk;
 
         NormalTextViewHolder(View view) {
             super(view);

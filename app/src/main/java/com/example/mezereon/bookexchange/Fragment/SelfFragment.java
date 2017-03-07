@@ -18,6 +18,8 @@ import com.example.mezereon.bookexchange.Adapter.MyRecycleViewAdapter;
 import com.example.mezereon.bookexchange.Adapter.NormalRecycleViewAdapter;
 import com.example.mezereon.bookexchange.R;
 import com.github.ybq.android.spinkit.SpinKitView;
+import com.lzy.widget.PullZoomView;
+import com.lzy.widget.manager.ExpandLinearLayoutManager;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -43,6 +45,8 @@ public class SelfFragment extends Fragment {
     TextView name;
     @BindView(R.id.textView12)
     TextView sign;
+    @BindView(R.id.pzv)
+    PullZoomView pullZoomView;
 
     private boolean hasLazyLoad = false;
     private View viewOnSelfFragment;
@@ -93,16 +97,28 @@ public class SelfFragment extends Fragment {
     }
 
     private void setTheRecycleView() {
-        setting.setLayoutManager(new LinearLayoutManager(viewOnSelfFragment.getContext()));//这里用线性显示 类似于listview
+        setting.setLayoutManager(new ExpandLinearLayoutManager(viewOnSelfFragment.getContext()));//这里用线性显示 类似于listview
         setting.setAdapter(new MyRecycleViewAdapter(viewOnSelfFragment.getContext()));
+        //OverScrollDecoratorHelper.setUpOverScroll(setting,OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
     }
 
     private void setViewOverScroll() {
-        IOverScrollDecor decor = OverScrollDecoratorHelper.setUpOverScroll(setting,OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
-        decor.setOverScrollStateListener(new IOverScrollStateListener() {
+        pullZoomView.setIsParallax(true);
+        pullZoomView.setIsZoomEnable(true);
+        pullZoomView.setSensitive(1.5f);
+        pullZoomView.setZoomTime(500);
+        pullZoomView.setOnScrollListener(new PullZoomView.OnScrollListener() {
             @Override
-            public void onOverScrollStateChange(IOverScrollDecor decor, int oldState, int newState) {
-
+            public void onScroll(int l, int t, int oldl, int oldt) {
+                System.out.println("onScroll   t:" + t + "  oldt:" + oldt);
+            }
+            @Override
+            public void onHeaderScroll(int currentY, int maxY) {
+                System.out.println("onHeaderScroll   currentY:" + currentY + "  maxY:" + maxY);
+            }
+            @Override
+            public void onContentScroll(int l, int t, int oldl, int oldt) {
+                System.out.println("onContentScroll   t:" + t + "  oldt:" + oldt);
             }
         });
     }
