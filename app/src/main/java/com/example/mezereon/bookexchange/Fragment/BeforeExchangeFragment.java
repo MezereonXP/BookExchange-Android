@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
@@ -24,6 +25,7 @@ import com.example.mezereon.bookexchange.Module.Exchange;
 import com.example.mezereon.bookexchange.MyApp;
 import com.example.mezereon.bookexchange.R;
 import com.github.ybq.android.spinkit.SpinKitView;
+import com.jakewharton.rxbinding.view.RxView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +62,8 @@ public class BeforeExchangeFragment extends Fragment {
 
     public interface GetExchangeService {
         @GET("getExchange.php")
-        Observable<List<Exchange>> getExchanges(@Query("username") String username);
+        Observable<List<Exchange>> getExchanges(@Query("username") String username,
+                                                @Query("status") String status);
     }
 
     public BeforeExchangeFragment() {
@@ -103,7 +106,7 @@ public class BeforeExchangeFragment extends Fragment {
     private void getExchangeFromNetWork() {
         GetExchangeService getExchangeService=retrofit.create(GetExchangeService.class);
         Subscription subscription=getExchangeService.getExchanges(getActivity()
-                .getSharedPreferences("USERINFO",getActivity().MODE_PRIVATE).getString("USERNAME","NONE"))
+                .getSharedPreferences("USERINFO",getActivity().MODE_PRIVATE).getString("USERNAME","NONE"),"0")
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<List<Exchange>>() {
@@ -111,7 +114,8 @@ public class BeforeExchangeFragment extends Fragment {
                     public void onCompleted() { }
                     @Override
                     public void onError(Throwable e) {
-                        Toasty.error(getActivity(),"网络出错", Toast.LENGTH_SHORT).show(); }
+                        Toasty.error(getActivity(),"网络出错", Toast.LENGTH_SHORT).show();
+                    }
                     @Override
                     public void onNext(List<Exchange> exchanges) {
                         MyApp.getInstance().setExchanges(reveseList(exchanges));

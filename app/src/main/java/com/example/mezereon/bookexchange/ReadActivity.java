@@ -33,6 +33,10 @@ import com.github.ybq.android.spinkit.SpinKitView;
 import com.jakewharton.rxbinding.view.RxView;
 import com.squareup.picasso.Picasso;
 
+import org.sufficientlysecure.htmltextview.HtmlHttpImageGetter;
+import org.sufficientlysecure.htmltextview.HtmlResImageGetter;
+import org.sufficientlysecure.htmltextview.HtmlTextView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +60,7 @@ public class ReadActivity extends AppCompatActivity {
     @BindView(R.id.textView14)
     TextView title;
     @BindView(R.id.textView15)
-    TextView content;
+    HtmlTextView content;
     @BindView(R.id.readtitle)
     ImageView back;
     @BindView(R.id.spin_kitInRead)
@@ -287,7 +291,7 @@ public class ReadActivity extends AppCompatActivity {
                     }
                     @Override
                     public void onNext(List<SimpleArticle> simpleArticle) {
-                        content.setText(Html.fromHtml(simpleArticle.get(0).getContent()));
+                        content.setHtml(simpleArticle.get(0).getContent(),new HtmlHttpImageGetter(content));
                         hideTheSpinKitView();
                         showTheArticle();
                     }

@@ -190,7 +190,7 @@ public class UserInfoActivity extends AppCompatActivity {
         ChangeInfoService changeInfoService=retrofit.create(ChangeInfoService.class);
         Subscription subscription=changeInfoService.changeInfo(Integer.parseInt(sharePreferenceInUserInfo.getString("USERID","none")),
                 sharePreferenceInUserInfo.getString("USERNAME","NONE"),sharePreferenceInUserInfo.getString("USERPASSWORD","NONE"),
-                sharePreferenceInUserInfo.getString("USERSEX","NONE"),email.getText().toString(),
+                sex.getText().toString(),email.getText().toString(),
                 phone.getText().toString())
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
@@ -217,6 +217,7 @@ public class UserInfoActivity extends AppCompatActivity {
         sharePreferenceInUserInfo.edit().remove("USEREMAIL").commit();
         sharePreferenceInUserInfo.edit().putString("USEREMAIL",email.getText().toString()).commit();
         sharePreferenceInUserInfo.edit().putString("USERPHONE",phone.getText().toString()).commit();
+        sharePreferenceInUserInfo.edit().putString("USERSEX",sex.getText().toString()).commit();
     }
 
     private void setTheView() {

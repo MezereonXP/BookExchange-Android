@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.example.mezereon.bookexchange.Adapter.BookRecycleViewAdapter;
@@ -33,6 +35,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
@@ -89,9 +92,16 @@ public class BookShowFragment extends Fragment {
         });
     }
 
+
     public interface GetBookService {
         @GET("getAllBook.php")
         Observable<List<Book>> getAllBooks();
+    }
+
+
+    public void getBooksByName(List<Book> books) {
+        MyApp.getInstance().setBooks(reveseList(books));
+        setTheAdapterForRecycleView(reveseList(books));
     }
 
     private void getBooksFromNetWork() {
@@ -101,10 +111,12 @@ public class BookShowFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Book>>() {
                     @Override
-                    public void onCompleted() { }
+                    public void onCompleted() {
+                        Toasty.success(getActivity(),"加载完成", Toast.LENGTH_SHORT).show();
+                    }
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("error",e.toString());
+                        Toasty.error(getActivity(),"网络出错", Toast.LENGTH_SHORT).show();
                     }
                     @Override
                     public void onNext(List<Book> book) {

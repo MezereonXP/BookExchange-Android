@@ -34,7 +34,9 @@ import com.example.mezereon.bookexchange.Fragment.BookShowFragment;
 import com.example.mezereon.bookexchange.Fragment.CommentFragment;
 import com.example.mezereon.bookexchange.Fragment.SelfFragment;
 import com.example.mezereon.bookexchange.Fragment.TalkFragment;
+import com.example.mezereon.bookexchange.Module.Article;
 import com.example.mezereon.bookexchange.Module.Book;
+import com.example.mezereon.bookexchange.Module.Forum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +46,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -67,6 +70,24 @@ public class HomeActivity extends AppCompatActivity {
     @BindView(R.id.imageView2)
     ImageView add;
 
+    @Inject
+    Retrofit retrofit;
+
+    public interface GetBookByNameService {
+        @GET("getBookByName.php")
+        Observable<List<Book>> getBooks(@Query("bookname") String bookName);
+    }
+
+    public interface GetArticleByNameService {
+        @GET("getArticleByName.php")
+        Observable<List<Article>> getBooks(@Query("bookname") String bookName);
+    }
+
+    public interface GetForumByNameService {
+        @GET("getForumByName.php")
+        Observable<List<Forum>> getForums(@Query("bookname") String bookName);
+    }
+
     private ArrayList<MyOnTouchListener> onTouchListeners = new ArrayList<MyOnTouchListener>(
             10);
     private FragmentPagerAdapter myAdapter;
@@ -80,12 +101,13 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheStatusBar();
-        setTransition();
         setContentView(R.layout.activity_home);
+        //judgeTheIntentValue();
         initView();
+        injectByDagger();
         manageTheView();
         setTheAddEvent();
-
+        setTheSearchView();
         layout_tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -104,6 +126,101 @@ public class HomeActivity extends AppCompatActivity {
             public void onTabReselected(TabLayout.Tab tab) { }
         });
     }
+
+    private void injectByDagger() {
+        DaggerAppComponent.builder().build().inject(this);
+    }
+
+    private void setTheSearchView() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                getThingsByName(query);
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+    }
+
+    private void getThingsByName(String query) {
+        switch (layout_tab.getSelectedTabPosition()){
+            case 0:
+                getBooksByName(query);
+                break;
+            case 1:
+                getArticlesByName(query);
+                break;
+            case 2:
+                getForumByName(query);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void getForumByName(String query) {
+        GetForumByNameService getForumByNameService=retrofit.create(GetForumByNameService.class);
+        Subscription subscription=getForumByNameService.getForums(query)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Forum>>() {
+                    @Override
+                    public void onCompleted() {}
+                    @Override
+                    public void onError(Throwable e) {
+                        Toasty.error(HomeActivity.this,
+                                "查找失败", Toast.LENGTH_SHORT).show();
+                    }
+                    @Override
+                    public void onNext(List<Forum> forums) {
+                        talkfragment.getForumsByName(forums);
+                    }
+                });
+    }
+
+    private void getArticlesByName(String query) {
+        GetArticleByNameService getArticlesByNameService=retrofit.create(GetArticleByNameService.class);
+        Subscription subscription=getArticlesByNameService.getBooks(query)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Article>>() {
+                    @Override
+                    public void onCompleted() {}
+                    @Override
+                    public void onError(Throwable e) {
+                        Toasty.error(HomeActivity.this,
+                                "查找失败", Toast.LENGTH_SHORT).show();
+                    }
+                    @Override
+                    public void onNext(List<Article> articles) {
+                        commentfragment.getBooksByName(articles);
+                    }
+                });
+    }
+
+
+    public void getBooksByName(String query) {
+        GetBookByNameService getBookByNameService=retrofit.create(GetBookByNameService.class);
+        Subscription subscription=getBookByNameService.getBooks(query)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Book>>() {
+                    @Override
+                    public void onCompleted() {}
+                    @Override
+                    public void onError(Throwable e) {
+                        Toasty.error(HomeActivity.this,"查找失败", Toast.LENGTH_SHORT).show();
+                    }
+                    @Override
+                    public void onNext(List<Book> books) {
+                        bookShowFragment.getBooksByName(books);
+                    }
+                });
+    }
+
 
     private void setTheAddEvent() {
         add.setOnClickListener(new View.OnClickListener() {
@@ -179,8 +296,9 @@ public class HomeActivity extends AppCompatActivity {
     //Set the status bar of the system
     private void setTheStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+            //getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
             getWindow().setStatusBarColor(Color.parseColor(MyApp.COLOR_STATUSBAR));
+            //setTransition();
         }
     }
 

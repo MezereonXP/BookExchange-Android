@@ -2,29 +2,54 @@ package com.example.mezereon.bookexchange;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.mezereon.bookexchange.Component.DaggerAppComponent;
 import com.example.mezereon.bookexchange.Fragment.BeforeExchangeFragment;
 import com.example.mezereon.bookexchange.Fragment.ExchangedFragment;
 import com.example.mezereon.bookexchange.Fragment.ExchangingFragment;
+import com.example.mezereon.bookexchange.Module.Book;
+import com.example.mezereon.bookexchange.Module.Exchange;
+import com.jakewharton.rxbinding.view.RxView;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 import com.squareup.picasso.Picasso;
 
 
+import java.util.List;
+
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
+import retrofit2.Retrofit;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
+import rx.Observable;
+import rx.Scheduler;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 public class MyExchangeActivity extends AppCompatActivity {
 
@@ -45,13 +70,126 @@ public class MyExchangeActivity extends AppCompatActivity {
     @BindView(R.id.bookNameInMyExchange)
     TextView bookName;
 
+    private Exchange myExchange;
+    private ProgressDialog progressDialog;
+
+    @Inject
+    Retrofit retrofit;
+
+    public interface AgreeService {
+        @GET("setExchange.php")
+        Observable<Void> agree(@Query("id") String id,
+                                       @Query("ida") String ida,
+                                       @Query("idb") String idb,
+                                       @Query("bookid") String bookid);
+    }
+
+    public interface RefuseService {
+        @GET("setExchange2.php")
+        Observable<Void> refuse(@Query("id") String id);
+    }
+
+    public interface SendService {
+        @GET("send.php")
+        Observable<Void> send(@Query("id") String id,
+                              @Query("number") String number,
+                              @Query("kind") String kind);
+    }
+
+    public interface ReceviceService {
+        @GET("recevie.php")
+        Observable<Void> recevie(@Query("id") String id,
+                              @Query("kind") String kind);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheStatusBar();
         setContentView(R.layout.activity_my_exchange);
+        initTheProgressDialog();
+        injectByDagger();
         bindAllTheView();
         setTheFragmentAdapter();
+        setTheButtonClickEvent();
+    }
+
+    private void injectByDagger() {
+        DaggerAppComponent.builder().build().inject(this);
+    }
+
+    private void initTheProgressDialog() {
+        progressDialog=new ProgressDialog(this);
+        progressDialog.setIndeterminate(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage("正在向服务器确认信息....");
+        progressDialog.setTitle("System");
+    }
+
+    private void setTheButtonClickEvent() {
+        RxView.clicks(agree)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        progressDialog.show();
+                        agreeTheExchange();
+                    }
+                });
+        RxView.clicks(refuse)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        progressDialog.show();
+                        refuseTheExchange();
+                    }
+                });
+    }
+
+    private void refuseTheExchange() {
+        RefuseService refuseTheExchange=retrofit.create(RefuseService.class);
+        Subscription subscription=refuseTheExchange.refuse(myExchange.getId()+"")
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(new Subscriber<Void>() {
+                                            @Override
+                                            public void onCompleted() {}
+                                            @Override
+                                            public void onError(Throwable e) {
+                                                Toasty.error(MyExchangeActivity.this,"网络出错"
+                                                        , Toast.LENGTH_SHORT).show();
+                                            }
+                                            @Override
+                                            public void onNext(Void aVoid) {
+                                                progressDialog.dismiss();
+                                                setViewVisibility(View.GONE);
+                                                Toasty.success(MyExchangeActivity.this,"拒绝成功"
+                                                        , Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+    }
+
+    private void agreeTheExchange() {
+        AgreeService agreeService=retrofit.create(AgreeService.class);
+        Subscription subcription=agreeService.agree(myExchange.getId()+"",myExchange.getBookida()
+                                    ,myExchange.getBookidb(),myExchange.getBookida())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Subscriber<Void>() {
+                                    @Override
+                                    public void onCompleted() { }
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        Toasty.error(MyExchangeActivity.this,"网络出错"
+                                            , Toast.LENGTH_SHORT).show();
+                                    }
+                                    @Override
+                                    public void onNext(Void v) {
+                                        progressDialog.dismiss();
+                                        setViewVisibility(View.GONE);
+                                        Toasty.success(MyExchangeActivity.this,"同意成功"
+                                                , Toast.LENGTH_SHORT).show();
+                                    }
+                                });
     }
 
     //Set the status bar of the system
@@ -78,7 +216,8 @@ public class MyExchangeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    public void showCover(String booksrcb, String booknameb) {
+    public void showCover(String booksrcb, String booknameb, Exchange exchange) {
+        this.myExchange=exchange;
         setViewVisibility(View.VISIBLE);
         Picasso.with(this).load(booksrcb).into(bookPic);
         bookName.setText(booknameb);
@@ -121,6 +260,83 @@ public class MyExchangeActivity extends AppCompatActivity {
         }else{
             super.onBackPressed();
         }
+    }
+
+    public void showDialog(String s){
+        new AlertDialog.Builder(this).setTitle("系统提示")//设置对话框标题
+                .setMessage((!s.equals(""))?"您的单号为"+s:"对方还未上传物流信息")//设置显示的内5容
+                .setPositiveButton("确定",new DialogInterface.OnClickListener() {//添加确定按钮
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {//确定按钮的响应事件
+
+                    }
+                }).setNegativeButton("取消",new DialogInterface.OnClickListener() {//添加返回按钮
+            @Override
+            public void onClick(DialogInterface dialog, int which) { }
+        }).show();//在按键响应事件中显示此对话框
+    }
+    public void showInputDialog(final int kind,final int id){
+            final EditText editText = new EditText(this);
+            AlertDialog.Builder inputDialog =
+                    new AlertDialog.Builder(this);
+            inputDialog.setTitle("请输入单号").setView(editText);
+            inputDialog.setPositiveButton("确定",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String number= editText.getText().toString();
+                            sendNumber(kind,number,id);
+                        }
+                    }).show();
 
     }
+
+    private void sendNumber(int kind, String number, int id) {
+        progressDialog.show();
+        SendService sendService=retrofit.create(SendService.class);
+        Subscription subscription=sendService.send(id+"",number,kind+"")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Void>() {
+                    @Override
+                    public void onCompleted() {}
+                    @Override
+                    public void onError(Throwable e) {
+                        Toasty.error(MyExchangeActivity.this,"网络出错"
+                                , Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                    }
+                    @Override
+                    public void onNext(Void aVoid) {
+                        Toasty.success(MyExchangeActivity.this,"提交成功"
+                                , Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                    }
+                });
+    }
+
+    public void recevie(int id, int kind) {
+        progressDialog.show();
+        ReceviceService recevieService=retrofit.create(ReceviceService.class);
+        Subscription subscription=recevieService.recevie(id+"",kind+"")
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<Void>() {
+                            @Override
+                            public void onCompleted() {}
+                            @Override
+                            public void onError(Throwable e) {
+                                Toasty.error(MyExchangeActivity.this,"网络出错"
+                                        , Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
+                            }
+                            @Override
+                            public void onNext(Void aVoid) {
+                                Toasty.success(MyExchangeActivity.this,"确认成功"
+                                        , Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
+                            }
+                        });
+    }
+
 }

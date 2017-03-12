@@ -66,20 +66,21 @@ public class BeforeExchangeRecycleViewAdapter extends RecyclerView.Adapter<Befor
     @Override
     public void onBindViewHolder(BeforeExchangeViewHolder holder, int position) {
         Exchange exchange=exchanges.get(position);
-        if(username.equals(exchange.getUsernamea())){
-            holder.bookname.setText(exchange.getBooknameb());
-            Picasso.with(mContext).load(exchange.getBooksrcb()).into(holder.bookPic);
-            holder.date.setText(exchange.getDate());
-            holder.userName.setText(exchange.getUsernameb());
-            holder.check.setVisibility(View.INVISIBLE);
-            holder.waitText.setVisibility(View.VISIBLE);
-        }else{
-            holder.bookname.setText(exchange.getBooknamea());
-            Picasso.with(mContext).load(exchange.getBooksrca()).into(holder.bookPic);
-            holder.date.setText(exchange.getDate());
-            holder.userName.setText(exchange.getUsernamea());
-            setTheClickEvent(holder,position);
-        }
+            if (username.equals(exchange.getUsernamea())) {
+                holder.bookname.setText(exchange.getBooknameb());
+                Picasso.with(mContext).load(exchange.getBooksrcb()).into(holder.bookPic);
+                holder.date.setText(exchange.getDate());
+                holder.userName.setText(exchange.getUsernameb());
+                holder.check.setVisibility(View.INVISIBLE);
+                holder.waitText.setVisibility(View.VISIBLE);
+            } else {
+                holder.bookname.setText(exchange.getBooknamea());
+                Picasso.with(mContext).load(exchange.getBooksrca()).into(holder.bookPic);
+                holder.date.setText(exchange.getDate());
+                holder.userName.setText(exchange.getUsernamea());
+                setTheClickEvent(holder, position);
+            }
+
 
     }
 
@@ -90,7 +91,8 @@ public class BeforeExchangeRecycleViewAdapter extends RecyclerView.Adapter<Befor
                     @Override
                     public void call(Void aVoid) {
                        MyExchangeActivity myActivity=(MyExchangeActivity)mContext;
-                        myActivity.showCover(exchanges.get(position).getBooksrcb(),exchanges.get(position).getBooknameb());
+                        myActivity.showCover(exchanges.get(position).getBooksrcb()
+                                ,exchanges.get(position).getBooknameb(),exchanges.get(position));
                     };
                 });
     }

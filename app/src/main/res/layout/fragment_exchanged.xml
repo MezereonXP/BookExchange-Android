@@ -2,14 +2,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.mezereon.bookexchange.Fragment.ExchangedFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.baoyz.widget.PullRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Exchanged" />
+        android:id="@+id/pullRefreshLayoutInExchanged">
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recycleViewOfBooksInExchanged"
+            android:visibility="invisible">
+
+        </android.support.v7.widget.RecyclerView>
+    </com.baoyz.widget.PullRefreshLayout>
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/spin_kitInExchanged"
+        style="@style/SpinKitView.CubeGrid"
+        android:layout_gravity="center_vertical"
+        app:SpinKit_Color="#0277bd"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="231dp"
+        android:layout_centerHorizontal="true" />
 
 
 </FrameLayout>

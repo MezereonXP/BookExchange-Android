@@ -14,12 +14,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.example.mezereon.bookexchange.Adapter.NormalRecycleViewAdapter;
 import com.example.mezereon.bookexchange.Adapter.NormalRecycleViewAdapter2;
 import com.example.mezereon.bookexchange.Component.DaggerAppComponent;
 import com.example.mezereon.bookexchange.Module.Article;
+import com.example.mezereon.bookexchange.Module.Book;
 import com.example.mezereon.bookexchange.Module.Forum;
 import com.example.mezereon.bookexchange.MyApp;
 import com.example.mezereon.bookexchange.R;
@@ -32,6 +34,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 import me.everything.android.ui.overscroll.IOverScrollDecor;
 import me.everything.android.ui.overscroll.IOverScrollStateListener;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
@@ -99,6 +102,11 @@ public class TalkFragment extends Fragment {
         });
     }
 
+    public void getForumsByName(List<Forum> forums) {
+        MyApp.getInstance().setForums(reveseList(forums));
+        setTheAdapterForRecycleView(reveseList(forums));
+    }
+
     private void bindAllViews() {
         ButterKnife.bind(this,v);
     }
@@ -126,10 +134,12 @@ public class TalkFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Forum>>() {
                     @Override
-                    public void onCompleted() { }
+                    public void onCompleted() {
+                        //Toasty.success(getActivity(),"加载完成", Toast.LENGTH_SHORT).show();
+                    }
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("error",e.toString());
+                        Toasty.error(getActivity(),"网络出错", Toast.LENGTH_SHORT).show();
                     }
                     @Override
                     public void onNext(List<Forum> forums) {

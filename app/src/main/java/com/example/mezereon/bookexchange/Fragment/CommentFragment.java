@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
+import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.example.mezereon.bookexchange.Adapter.NormalRecycleViewAdapter;
@@ -36,6 +37,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 import me.everything.android.ui.overscroll.IOverScrollDecor;
 import me.everything.android.ui.overscroll.IOverScrollStateListener;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
@@ -85,6 +87,11 @@ public class CommentFragment extends Fragment implements
             onLazyLoad();
             hasLazyLoad = true;
         }
+    }
+
+    public void getBooksByName(List<Article> articles) {
+        MyApp.getInstance().setArticles(reveseList(articles));
+        setTheAdapter(reveseList(articles));
     }
 
     @Override
@@ -161,10 +168,12 @@ public class CommentFragment extends Fragment implements
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Article>>() {
                     @Override
-                    public void onCompleted() { }
+                    public void onCompleted() {
+                       //Toasty.success(getActivity(),"加载完成", Toast.LENGTH_SHORT).show();
+                    }
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("error",e.toString());
+                        Toasty.error(getActivity(),"网络出错", Toast.LENGTH_SHORT).show();
                     }
                     @Override
                     public void onNext(List<Article> articles) {

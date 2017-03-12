@@ -28,6 +28,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.request.animation.ViewPropertyAnimation;
+import com.daimajia.easing.Glider;
+import com.daimajia.easing.Skill;
 import com.example.mezereon.bookexchange.Adapter.BookListRecycleViewAdapter;
 import com.example.mezereon.bookexchange.Component.DaggerAppComponent;
 import com.example.mezereon.bookexchange.Module.Book;
@@ -116,7 +118,20 @@ public class ExchangeBookActivity extends AppCompatActivity{
         initViewResource();
         initProgressDialog();
         initSharePreference();
+        animateTheInfoOfBook();
         setTheClickEvent();
+    }
+
+    private void animateTheInfoOfBook() {
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(
+                Glider.glide(Skill.ElasticEaseOut, 1200, ObjectAnimator.ofFloat(introduction, "translationX", -1200, 0)),
+                Glider.glide(Skill.ElasticEaseOut, 1200, ObjectAnimator.ofFloat(bookName, "translationX", -1200, 0)),
+                Glider.glide(Skill.ElasticEaseOut, 1200, ObjectAnimator.ofFloat(bookPic, "translationX", -1200, 0)),
+                Glider.glide(Skill.ElasticEaseOut, 1200, ObjectAnimator.ofFloat(wantKind, "translationX", -1200, 0))
+        );
+        set.setDuration(MyApp.MIDDLE_DURATION);
+        set.start();
     }
 
     private void setTheSatusBar() {

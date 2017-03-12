@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:elevation="8dp"
         android:background="#FFFFFF"
-        android:id="@+id/cardViewInBeforeExchange"
+        android:id="@+id/cardViewInExchanging"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
         android:layout_alignParentTop="true"
@@ -25,64 +25,64 @@
             android:background="#FFFFFF"
             android:padding="10dp">
 
+            <TextView
+                android:id="@+id/sendNumber"
+                android:textColor="#656565"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="5dp"
+                android:text="发布物流"
+                android:layout_marginLeft="160dp"
+                android:textSize="12sp"
+                android:layout_alignBottom="@+id/checkNumberInExchanging"
+                 />
+
             <ImageView
+                android:id="@+id/bookPicInExchanging"
                 android:layout_width="60dp"
                 android:layout_height="80dp"
-                android:id="@+id/bookPicInBeforeExchange"
-                android:src="@mipmap/ic_launcher"/>
+                android:src="@mipmap/ic_launcher" />
 
             <TextView
-                android:text="TextView"
+                android:id="@+id/userNameInExchanging"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/userNameInBeforeExchange"
                 android:layout_alignParentTop="true"
-                android:layout_alignStart="@+id/booknameInBeforeExchange" />
+                android:layout_alignStart="@+id/booknameInExchanging"
+                android:text="TextView" />
 
             <TextView
-                android:text="TextView"
-                android:textSize="14sp"
-                android:textColor="#101010"
-                android:layout_marginTop="5dp"
+                android:id="@+id/booknameInExchanging"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/userNameInExchanging"
                 android:layout_marginStart="16dp"
-                android:id="@+id/booknameInBeforeExchange"
-                android:layout_below="@+id/userNameInBeforeExchange"
-                android:layout_toEndOf="@+id/bookPicInBeforeExchange" />
-
-            <TextView
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@+id/bookPicInExchanging"
                 android:text="TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/dateInBeforeExchange"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="14dp" />
-
+                android:maxLines="1"
+                android:textColor="#101010"
+                android:textSize="14sp" />
 
             <TextView
-                android:text="正在等待对方同意...."
-                android:visibility="invisible"
-                android:textSize="14sp"
-                android:textColor="#0277bd"
+                android:id="@+id/dateInExchanging"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView25"
-                android:layout_alignBaseline="@+id/button11"
-                android:layout_alignBottom="@+id/button11"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="14dp"
+                android:text="TextView" />
 
-            <Button
-                android:text="查看请求"
-                android:textSize="14sp"
-                android:textColor="#0277bd"
+            <TextView
+                android:id="@+id/checkNumberInExchanging"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="#FFFFFF"
-                android:layout_width="60dp"
-                android:layout_height="30dp"
-                android:id="@+id/button11"
-                android:layout_below="@+id/booknameInBeforeExchange"
-                android:layout_alignEnd="@+id/dateInBeforeExchange" />
+                android:text="查看对方物流"
+                android:textColor="#0277bd"
+                android:textSize="12sp"
+                android:layout_alignBottom="@+id/bookPicInExchanging"
+                android:layout_alignEnd="@+id/dateInExchanging" />
 
         </RelativeLayout>
 

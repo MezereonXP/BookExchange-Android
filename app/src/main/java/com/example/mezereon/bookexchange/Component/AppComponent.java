@@ -13,10 +13,12 @@ import com.example.mezereon.bookexchange.Fragment.BookShowFragment;
 import com.example.mezereon.bookexchange.Fragment.CommentFragment;
 import com.example.mezereon.bookexchange.Fragment.ExchangedFragment;
 import com.example.mezereon.bookexchange.Fragment.ExchangingFragment;
+import com.example.mezereon.bookexchange.Fragment.SelfFragment;
 import com.example.mezereon.bookexchange.Fragment.TalkFragment;
 import com.example.mezereon.bookexchange.HomeActivity;
 import com.example.mezereon.bookexchange.LoginActivity;
 import com.example.mezereon.bookexchange.Module.BookExchangeApplicationModule;
+import com.example.mezereon.bookexchange.MyExchangeActivity;
 import com.example.mezereon.bookexchange.ReadActivity;
 import com.example.mezereon.bookexchange.UserBookActivity;
 import com.example.mezereon.bookexchange.UserInfoActivity;
@@ -49,6 +51,8 @@ public interface AppComponent {
     void inject(BeforeExchangeFragment beforeExchangeFragment);
     void inject(ExchangingFragment exchangingFragment);
     void inject(ExchangedFragment exchangedFragment);
+    void inject(MyExchangeActivity myExchangeActivity);
+    void inject(SelfFragment selfFragment);
 
     Retrofit retrofit();
 }

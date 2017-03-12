@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:elevation="8dp"
         android:background="#FFFFFF"
-        android:id="@+id/cardViewInBeforeExchange"
+        android:id="@+id/cardViewInExchanged"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
         android:layout_alignParentTop="true"
@@ -26,63 +26,51 @@
             android:padding="10dp">
 
             <ImageView
+                android:id="@+id/bookPicInExchanged"
                 android:layout_width="60dp"
                 android:layout_height="80dp"
-                android:id="@+id/bookPicInBeforeExchange"
-                android:src="@mipmap/ic_launcher"/>
+                android:src="@mipmap/ic_launcher" />
 
             <TextView
-                android:text="TextView"
+                android:id="@+id/userNameInExchanged"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/userNameInBeforeExchange"
                 android:layout_alignParentTop="true"
-                android:layout_alignStart="@+id/booknameInBeforeExchange" />
+                android:layout_alignStart="@+id/booknameInExchanged"
+                android:text="TextView" />
 
             <TextView
-                android:text="TextView"
-                android:textSize="14sp"
-                android:textColor="#101010"
-                android:layout_marginTop="5dp"
+                android:id="@+id/booknameInExchanged"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/userNameInExchanged"
                 android:layout_marginStart="16dp"
-                android:id="@+id/booknameInBeforeExchange"
-                android:layout_below="@+id/userNameInBeforeExchange"
-                android:layout_toEndOf="@+id/bookPicInBeforeExchange" />
-
-            <TextView
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@+id/bookPicInExchanged"
                 android:text="TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/dateInBeforeExchange"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="14dp" />
-
+                android:maxLines="1"
+                android:textColor="#101010"
+                android:textSize="14sp" />
 
             <TextView
-                android:text="正在等待对方同意...."
-                android:visibility="invisible"
-                android:textSize="14sp"
-                android:textColor="#0277bd"
+                android:id="@+id/dateInExchanged"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView25"
-                android:layout_alignBaseline="@+id/button11"
-                android:layout_alignBottom="@+id/button11"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="14dp"
+                android:text="TextView" />
 
-            <Button
-                android:text="查看请求"
-                android:textSize="14sp"
-                android:textColor="#0277bd"
+            <TextView
+                android:id="@+id/checkNumberInExchanged"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="#FFFFFF"
-                android:layout_width="60dp"
-                android:layout_height="30dp"
-                android:id="@+id/button11"
-                android:layout_below="@+id/booknameInBeforeExchange"
-                android:layout_alignEnd="@+id/dateInBeforeExchange" />
+                android:text="确认收货"
+                android:textColor="#0277bd"
+                android:textSize="16sp"
+                android:layout_alignBottom="@+id/bookPicInExchanged"
+                android:layout_alignEnd="@+id/dateInExchanged" />
 
         </RelativeLayout>
 

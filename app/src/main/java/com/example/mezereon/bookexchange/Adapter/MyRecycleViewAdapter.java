@@ -13,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mezereon.bookexchange.Fragment.SelfFragment;
+import com.example.mezereon.bookexchange.HomeActivity;
+import com.example.mezereon.bookexchange.LoginActivity;
 import com.example.mezereon.bookexchange.MyApp;
 import com.example.mezereon.bookexchange.MyExchangeActivity;
 import com.example.mezereon.bookexchange.R;
@@ -59,9 +62,36 @@ public class MyRecycleViewAdapter extends RecyclerView.Adapter<MyRecycleViewAdap
                 case 3:
                     setTheLog(holder,position);
                     break;
-                default:
+                case 4:
+                    setTheExit(holder,position);
                     break;
             }
+    }
+
+    private void setTheExit(MyRecycleViewHolder holder, int position) {
+        holder.pic.setImageResource(R.drawable.ic_exit_to_app_grey600_36dp);
+        holder.name.setText("注销账户");
+        holder.settingCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearTheInfo();
+                turnToLoginActivity();
+            }
+        });
+    }
+
+    private void turnToLoginActivity() {
+        Intent intent=new Intent();
+        intent.setClass(mContext, LoginActivity.class);
+        mContext.startActivity(intent);
+        HomeActivity homeActivity= (HomeActivity) mContext;
+        homeActivity.finish();
+        intent=null;
+    }
+
+    private void clearTheInfo() {
+        mContext.getSharedPreferences("USERINFO",mContext.MODE_PRIVATE)
+                .edit().clear().commit();
     }
 
     private void setTheLog(MyRecycleViewHolder holder, int position) {

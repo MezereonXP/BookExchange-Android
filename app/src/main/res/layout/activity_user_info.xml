@@ -67,7 +67,6 @@
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:text="Name"
-        android:enabled="false"
         android:ems="10"
         android:id="@+id/editText2"
         android:layout_alignBaseline="@+id/textView17"

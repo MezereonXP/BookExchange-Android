@@ -28,7 +28,7 @@ public class BookExchangeApplicationModule {
                 .setLenient()
                 .create();
         return new Retrofit.Builder().client(new OkHttpClient())
-                .baseUrl("http://xplovesaber.top/bookEx/")
+                .baseUrl("http://mezereon.gotoip2.com/bookEx/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();

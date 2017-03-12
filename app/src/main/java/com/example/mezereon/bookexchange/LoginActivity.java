@@ -40,6 +40,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import es.dmoral.toasty.Toasty;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -91,6 +92,17 @@ public class LoginActivity extends AppCompatActivity {
         @GET("getInfo.php")
         Observable<List<User>> login(@Query("username") String username);
     }
+
+    public interface RegistService {
+        @GET("register.php")
+        Observable<Void> regist(@Query("username") String username,
+                                     @Query("password") String password,
+                                     @Query("phone") String phone,
+                                     @Query("email") String email,
+                                     @Query("sex") String sex);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,7 +134,7 @@ public class LoginActivity extends AppCompatActivity {
         btn_logIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                expandTheWhiteView();
+                expandTheWhiteViewInRegist();
             }
         });
     }
@@ -139,7 +151,7 @@ public class LoginActivity extends AppCompatActivity {
     private void setSignUp() {
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { }
+            public void onClick(View v) {finish(); }
         });
     }
 
@@ -167,8 +179,52 @@ public class LoginActivity extends AppCompatActivity {
             intent.setClass(LoginActivity.this,HomeActivity.class);
             startActivity(intent);
             finish();
+            intent=null;
         }
     }
+
+    private void expandTheWhiteViewInRegist() {
+        white.setVisibility(View.VISIBLE);
+        btn_signIn.setVisibility(View.INVISIBLE);
+        ObjectAnimator animator1 = ObjectAnimator.ofFloat(white, "scaleY", 1f,100f);
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(white, "scaleX", 1f,100f);
+        AnimatorSet animSet = new AnimatorSet();
+        animSet.play(animator1).with(animator2);
+        animSet.setDuration(MyApp.SHORT_DURATION);
+        animSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                showTheSpinKitView();
+                registTheAccount();
+            }
+        });
+        animSet.start();
+    }
+
+    private void registTheAccount() {
+        RegistService registService=retrofit.create(RegistService.class);
+        Subscription subscription=registService.regist(name.getEditText().getText().toString()
+                            ,pwd.getEditText().getText().toString(),"暂无手机号~","暂无邮箱~"
+                            ,"性别不明")
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Subscriber<Void>() {
+                                @Override
+                                public void onCompleted() {}
+                                @Override
+                                public void onError(Throwable e) {
+                                    Toasty.error(LoginActivity.this,"网络出错"
+                                            , Toast.LENGTH_SHORT).show();
+                                }
+                                @Override
+                                public void onNext(Void users) {
+                                    Toasty.success(LoginActivity.this
+                                            ,"注册成功",Toast.LENGTH_SHORT,true).show();
+                                    getUserInfoFromNetWork();
+                                }
+                            });
+    }
+
 
     private void showTheLoginLayoutFirst() {
         ObjectAnimator moveIn = ObjectAnimator.ofFloat(title, "translationY", 0f,350f);
@@ -243,7 +299,10 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onCompleted() { }
                     @Override
-                    public void onError(Throwable e) { Log.d("error",e.toString()); }
+                    public void onError(Throwable e) {
+                        Toasty.error(LoginActivity.this,"网络出错"
+                            , Toast.LENGTH_SHORT).show();
+                    }
                     @Override
                     public void onNext(List<User> userList) {
                         hideTheSpinKitView();
@@ -286,6 +345,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void turnToHomePage() {
         Intent intent=new Intent();
+        intent.putExtra("FIRST",0);
         intent.setClass(LoginActivity.this,HomeActivity.class);
         startActivity(intent);
         finish();

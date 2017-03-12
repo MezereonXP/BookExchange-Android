@@ -46,7 +46,7 @@
             android:padding="1dp">
             <TextView
                 android:layout_weight="1"
-                android:text="Skip"
+                android:text="退出"
                 android:layout_width="178dp"
                 android:textColor="#424242"
                 android:layout_height="match_parent"
@@ -64,7 +64,7 @@
             android:padding="1dp"
             >
             <TextView
-                android:text="Sign In"
+                android:text="登陆"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="#01579b"
@@ -125,7 +125,7 @@
     </android.support.design.widget.TextInputLayout>
 
     <TextView
-        android:text="I have an account"
+        android:text="没有账号点这里"
         android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -135,7 +135,7 @@
         android:layout_alignStart="@+id/textInputLayout2" />
 
     <Button
-        android:text="Sign Up"
+        android:text="确认登陆"
         android:background="#FFFFFF"
         android:textColor="#01579b"
         android:layout_width="140dp"
@@ -147,7 +147,7 @@
         android:layout_alignBottom="@+id/textView4"
         android:layout_alignEnd="@+id/textInputLayout2" />
     <Button
-        android:text="Log In"
+        android:text="注册"
         android:background="#FFFFFF"
         android:textColor="#01579b"
         android:layout_width="140dp"
